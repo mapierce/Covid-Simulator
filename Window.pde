@@ -3,11 +3,12 @@ class Window implements CompletionCallback {
 	final float BALL_COUNT = 400;
 	final int LINE_POS = 100;
 
-	int healthyCount;
-	int recoveredCount;
-	int infectedCount;
-	ArrayList<Ball> balls;
-	Chart chart;
+	private int healthyCount;
+	private int recoveredCount;
+	private int infectedCount;
+	private ArrayList<Ball> balls;
+	private Chart chart;
+	private SimulationTimer timer = new SimulationTimer();
 
 	void start() {
 		balls = createBalls();
@@ -24,6 +25,7 @@ class Window implements CompletionCallback {
         stroke(0);
         line(0, LINE_POS, width, LINE_POS);
         updateCountText();
+        // timer.updateWithCounts(healthyCount, infectedCount, recoveredCount); - Call to time the simulation
         chart.display(healthyCount, infectedCount, recoveredCount);
 	}
 
