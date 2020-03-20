@@ -6,8 +6,9 @@ class Window implements CompletionCallback {
 	private int healthyCount;
 	private int recoveredCount;
 	private int infectedCount;
-	private ArrayList<Ball> balls;
+	private boolean simulationComplete = false;
 	private Chart chart;
+	private ArrayList<Ball> balls;
 	private SimulationTimer timer = new SimulationTimer();
 
 	void start() {
@@ -25,9 +26,12 @@ class Window implements CompletionCallback {
         stroke(0);
         line(0, LINE_POS, width, LINE_POS);
         updateCountText();
-        // timer.updateWithCounts(healthyCount, infectedCount, recoveredCount); - Call to time the simulation
         chart.display(healthyCount, infectedCount, recoveredCount);
+        handleResetOverlay();
+        // timer.updateWithCounts(healthyCount, infectedCount, recoveredCount); - Call to time the simulation
 	}
+
+	// Create visual components
 
 	ArrayList<Ball> createBalls() {
 	    ArrayList<Ball> balls = new ArrayList<Ball>();
@@ -48,6 +52,17 @@ class Window implements CompletionCallback {
 	    updateBalls(balls);
 	    return balls;
 	}
+
+	void handleResetOverlay() {
+		if (simulationComplete) {
+			fill(0, 0, 0, 200);
+			rect(0, LINE_POS, SCREEN_WIDTH, SCREEN_HEIGHT - LINE_POS);
+		} else {
+
+		}
+	}
+
+	// Utility
 
 	void updateBalls(ArrayList<Ball> balls) {
 	    int infectedId = (int)random(BALL_COUNT);
@@ -94,7 +109,7 @@ class Window implements CompletionCallback {
 	// CompletionCallback functions
 
 	void simulationComplete() {
-		println("FINISHED");
+		simulationComplete = !simulationComplete;
 	}
 	
 }

@@ -19,6 +19,7 @@ class Chart {
     private int totalItemCount;
     private int totalCalls;
     private float xInterval;
+    private boolean completed;
 
     Chart(int totalItemCount, int frameRate, CompletionCallback delegate) {
         this.delegate = delegate;
@@ -26,6 +27,7 @@ class Chart {
     	this.totalItemCount = totalItemCount;
     	this.totalCalls = frameRate * TOTAL_SECONDS;
     	this.xInterval = (float)chartWidth / (float)totalCalls;
+        this.completed = false;
     }
     
     void display(int healthyCount, int infectedCount, int recoveredCount) {
@@ -53,6 +55,10 @@ class Chart {
     	healthyArea.vertex(xPos, CHART_HEIGHT);
         healthyArea.vertex(xPos, 0);
         healthyArea.endShape(CLOSE);
+        if (xPos >= chartWidth && !completed) {
+            delegate.simulationComplete();
+            completed = true;
+        }
     }
 
     void updateInfectedShape() {
@@ -64,9 +70,7 @@ class Chart {
         for(Integer point : infectedPoints) {
         	if (xPos < chartWidth) {
         		xPos += xInterval;	
-        	} else {
-                delegate.simulationComplete();
-            }
+        	}
             float yPos = CHART_HEIGHT - (((float)point.intValue() / totalItemCount) * CHART_HEIGHT);
             infectedArea.vertex((int)xPos, (int)yPos);
         }
