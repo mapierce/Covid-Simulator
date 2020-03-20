@@ -1,0 +1,3 @@
+interface CompletionCallback {
+	void simulationComplete();
+}
