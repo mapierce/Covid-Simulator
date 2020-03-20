@@ -1,17 +1,39 @@
+import controlP5.*;
+
 class Window implements CompletionCallback {
 
 	final float BALL_COUNT = 400;
 	final int LINE_POS = 100;
 
+	private PApplet applet;
+	private ControlP5 cp5;
+	private controlP5.Button resetButton;
 	private int healthyCount;
 	private int recoveredCount;
 	private int infectedCount;
-	private boolean simulationComplete = false;
+	private boolean simulationComplete;
 	private Chart chart;
 	private ArrayList<Ball> balls;
 	private SimulationTimer timer = new SimulationTimer();
 
+	Window(PApplet applet) {
+		this.applet = applet;
+		this.cp5 = new ControlP5(applet);
+	}
+
+	void setup() {
+		resetButton = cp5.addButton("reset")
+			.setValue(1)
+			.setPosition((SCREEN_WIDTH / 2) - 50, SCREEN_HEIGHT / 2)
+			.setSize(100, 40).onPress(new CallbackListener() {
+		    	public void controlEvent(CallbackEvent event) {
+		    		start();
+		    	}
+		    });
+	}
+
 	void start() {
+		simulationComplete = false;
 		balls = createBalls();
 	    chart = new Chart((int)BALL_COUNT, FRAME_RATE, this);
 	}
@@ -57,8 +79,9 @@ class Window implements CompletionCallback {
 		if (simulationComplete) {
 			fill(0, 0, 0, 200);
 			rect(0, LINE_POS, SCREEN_WIDTH, SCREEN_HEIGHT - LINE_POS);
+			resetButton.show();
 		} else {
-
+			resetButton.hide();
 		}
 	}
 
