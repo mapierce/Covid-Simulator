@@ -35,6 +35,9 @@ class Ball {
 
     void setHealthStatus(HealthStatus healthStatus) {
         this.healthStatus = healthStatus;
+        if (healthStatus == HealthStatus.INFECTED) {
+            infectedTimer = millis();
+        }
     }
     
     // VISUAL
