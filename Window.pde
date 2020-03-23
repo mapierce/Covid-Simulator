@@ -11,6 +11,10 @@ class Window implements CompletionCallback {
 	private PApplet applet;
 	private ControlP5 cp5;
 	private controlP5.Button resetButton;
+	private Toggle toggle;
+
+	private PFont SFFont_25;
+	private PFont SFFont_14;
 	private int healthyCount;
 	private int recoveredCount;
 	private int infectedCount;
@@ -22,10 +26,13 @@ class Window implements CompletionCallback {
 	Window(PApplet applet) {
 		this.applet = applet;
 		this.cp5 = new ControlP5(applet);
+		this.SFFont_25 = loadFont("SFProDisplay-Light-25.vlw");
+		this.SFFont_14 = loadFont("SFProDisplay-Light-14.vlw");
 	}
 
 	void setup() {
 		setupResetButton();
+		setupMoveOnInfectedToggle();
 	}
 
 	void start() {
@@ -37,7 +44,7 @@ class Window implements CompletionCallback {
 	void drawWindow() {
         for (Ball ball : balls) {
             ball.display();
-            ball.updateLocation();
+            ball.updateLocation(toggle.getValue() == 1.0);
             ball.checkBoundaryCollision();
             ball.checkCollision();
         }
@@ -55,12 +62,30 @@ class Window implements CompletionCallback {
 	void setupResetButton() {
 		resetButton = cp5.addButton("reset")
 			.setValue(1)
+			.setFont(SFFont_14)
 			.setPosition((SCREEN_WIDTH / 2) - (RESET_BUTTON_WIDTH / 2), SCREEN_HEIGHT / 2)
 			.setSize(RESET_BUTTON_WIDTH, RESET_BUTTON_HEIGHT).onPress(new CallbackListener() {
 		    	public void controlEvent(CallbackEvent event) {
 		    		start();
 		    	}
 		    });
+	}
+
+	void setupMoveOnInfectedToggle() {
+		toggle = cp5.addToggle("")
+			.setPosition(8, BOTTOM_LINE_POS + 8)
+			.setSize(20, 20)
+			.setLabel("")
+			.setValue(true)
+			.setMode(ControlP5.SWITCH)
+			.setColorBackground(color(255))
+			.setColorForeground(color(#45D69A))
+			.setColorActive(#45D69A);
+		cp5.addTextlabel("stopMovingInfectedLabel")
+			.setText("Stop moving when infected")
+			.setPosition(32, BOTTOM_LINE_POS + 12)
+			.setColorValue(color(0))
+			.setFont(SFFont_14);
 	}
 
 	// Create visual components
@@ -103,12 +128,14 @@ class Window implements CompletionCallback {
 	        Ball ball = balls.get(i);
 	        ball.update(i,balls);
 	        if (i == infectedId) {
+	        	println("setting infected");
 	            ball.setHealthStatus(HealthStatus.INFECTED);
 	        }
 	    }
 	}
 
 	void updateCountText() {
+		textFont(SFFont_25);
 	    getCounts();
 	    fill(#45D69A);
 	    textSize(25);
