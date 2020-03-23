@@ -2,7 +2,7 @@ class Ball {
 
     // Constants
 
-    final float RADIUS = 7;
+    final float RADIUS = 5;
     final float INFECTED_TIME = 9000;
     final float LINE_POSITION = 100;
 
