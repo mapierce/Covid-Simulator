@@ -6,7 +6,7 @@ class Window implements CompletionCallback {
 	final int TOP_LINE_POS = 100;
 	final int BOTTOM_LINE_POS = 700;
 	final int RESET_BUTTON_WIDTH = 100;
-	final int RESET_BUTTON_HEIGHT = 40;
+	final int RESET_BUTTON_HEIGHT = 60;
 
 	private PApplet applet;
 	private ControlP5 cp5;
@@ -111,7 +111,7 @@ class Window implements CompletionCallback {
 			textFont(SFFont_25);
 			fill(255);
 			textAlign(CENTER);
-			text("Click to reset", width/2, height/2);
+			text("Click to start", width/2, height/2);
 			noLoop();
 		}
 	}
@@ -134,6 +134,7 @@ class Window implements CompletionCallback {
 	    getCounts();
 	    fill(#45D69A);
 	    textSize(25);
+	    textAlign(LEFT);
 	    text("Healthy: " + healthyCount, 10, 25);
 	    fill(#F45B69);
 	    textSize(25);
