@@ -4,7 +4,8 @@ class Ball {
 
     final float RADIUS = 5;
     final float INFECTED_TIME = 9000;
-    final float LINE_POSITION = 100;
+    final float TOP_LINE_POSITION = 100;
+    final float BOTTOM_LINE_POSITION = 700;
 
     // Private variables
     
@@ -76,11 +77,11 @@ class Ball {
         } else if (location. x < RADIUS) {
             location.x = RADIUS;
             velocity.x *= -1;
-        } else if (location.y > height - RADIUS) {
-            location.y = height - RADIUS;
+        } else if (location.y > BOTTOM_LINE_POSITION - RADIUS) {
+            location.y = BOTTOM_LINE_POSITION - RADIUS;
             velocity.y *= -1;
-        } else if (location.y < LINE_POSITION + RADIUS) {
-            location.y = LINE_POSITION + RADIUS;
+        } else if (location.y < TOP_LINE_POSITION + RADIUS) {
+            location.y = TOP_LINE_POSITION + RADIUS;
             velocity.y *= -1;
         }
     }

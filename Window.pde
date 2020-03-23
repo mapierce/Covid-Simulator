@@ -3,7 +3,10 @@ import controlP5.*;
 class Window implements CompletionCallback {
 
 	final float BALL_COUNT = 400;
-	final int LINE_POS = 100;
+	final int TOP_LINE_POS = 100;
+	final int BOTTOM_LINE_POS = 700;
+	final int RESET_BUTTON_WIDTH = 100;
+	final int RESET_BUTTON_HEIGHT = 40;
 
 	private PApplet applet;
 	private ControlP5 cp5;
@@ -39,7 +42,8 @@ class Window implements CompletionCallback {
             ball.checkCollision();
         }
         stroke(0);
-        line(0, LINE_POS, width, LINE_POS);
+        line(0, TOP_LINE_POS, width, TOP_LINE_POS);
+        line(0, BOTTOM_LINE_POS, width, BOTTOM_LINE_POS);
         updateCountText();
         chart.display(healthyCount, infectedCount, recoveredCount);
         handleResetOverlay();
@@ -63,9 +67,9 @@ class Window implements CompletionCallback {
 
 	ArrayList<Ball> createBalls() {
 	    ArrayList<Ball> balls = new ArrayList<Ball>();
-	    balls.add(new Ball(random(SCREEN_WIDTH), random(LINE_POS, SCREEN_HEIGHT)));
+	    balls.add(new Ball(random(SCREEN_WIDTH), random(TOP_LINE_POS, BOTTOM_LINE_POS)));
 	    while(balls.size() < BALL_COUNT) {
-	        Ball newBall = new Ball(random(SCREEN_WIDTH), random(LINE_POS, SCREEN_HEIGHT));
+	        Ball newBall = new Ball(random(SCREEN_WIDTH), random(TOP_LINE_POS, BOTTOM_LINE_POS));
 	        boolean overlapping = false;
 	        for (int j = 0; j < balls.size(); j++) {
 	            if (newBall.overlapsWith(balls.get(j))) {
@@ -84,7 +88,7 @@ class Window implements CompletionCallback {
 	void handleResetOverlay() {
 		if (simulationComplete) {
 			fill(0, 0, 0, 200);
-			rect(0, LINE_POS, SCREEN_WIDTH, SCREEN_HEIGHT - LINE_POS);
+			rect(0, TOP_LINE_POS, SCREEN_WIDTH, BOTTOM_LINE_POS - TOP_LINE_POS);
 			resetButton.show();
 		} else {
 			resetButton.hide();
