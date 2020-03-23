@@ -2,7 +2,7 @@ import controlP5.*;
 
 class Window implements CompletionCallback {
 
-	final float BALL_COUNT = 400;
+	final float DEFAULT_BALL_COUNT = 400;
 	final int TOP_LINE_POS = 100;
 	final int BOTTOM_LINE_POS = 700;
 	final int RESET_BUTTON_WIDTH = 100;
@@ -11,8 +11,10 @@ class Window implements CompletionCallback {
 	private PApplet applet;
 	private ControlP5 cp5;
 	private controlP5.Button resetButton;
-	private Toggle toggle;
+	private Toggle moveInfectedToggle;
+	private Textfield ballCountTextField;
 
+	private float ballCount;
 	private PFont SFFont_25;
 	private PFont SFFont_14;
 	private int healthyCount;
@@ -33,11 +35,14 @@ class Window implements CompletionCallback {
 	void setup() {
 		setupResetButton();
 		setupMoveOnInfectedToggle();
+		setupBallCountInput();
 	}
 
 	void resetView() {
+		String ballCountText = ballCountTextField.getText();
+		ballCount = Utility.isInteger(ballCountText) ? Float.parseFloat(ballCountText) : DEFAULT_BALL_COUNT;
 		balls = createBalls();
-	    chart = new Chart((int)BALL_COUNT, FRAME_RATE, this);
+	    chart = new Chart((int)ballCount, FRAME_RATE, this);
 	}
 
 	void start() {
@@ -48,7 +53,7 @@ class Window implements CompletionCallback {
 		if (!simulationComplete) {
 	        for (Ball ball : balls) {
 	            ball.display();
-	            ball.updateLocation(toggle.getValue() == 1.0);
+	            ball.updateLocation(moveInfectedToggle.getValue() == 1.0);
 	            ball.checkBoundaryCollision();
 	            ball.checkCollision();
 	        }
@@ -78,8 +83,13 @@ class Window implements CompletionCallback {
 	}
 
 	void setupMoveOnInfectedToggle() {
-		toggle = cp5.addToggle("")
-			.setPosition(8, BOTTOM_LINE_POS + 8)
+		cp5.addTextlabel("stopMovingInfectedLabel")
+			.setText("Stop moving when infected:")
+			.setPosition(8, BOTTOM_LINE_POS + 12)
+			.setColorValue(color(0))
+			.setFont(SFFont_14);
+		moveInfectedToggle = cp5.addToggle("infectedToggle")
+			.setPosition(200, BOTTOM_LINE_POS + 8)
 			.setSize(20, 20)
 			.setLabel("")
 			.setValue(true)
@@ -87,11 +97,22 @@ class Window implements CompletionCallback {
 			.setColorBackground(color(255))
 			.setColorForeground(color(#45D69A))
 			.setColorActive(#45D69A);
-		cp5.addTextlabel("stopMovingInfectedLabel")
-			.setText("Stop moving when infected")
-			.setPosition(32, BOTTOM_LINE_POS + 12)
+		
+	}
+
+	void setupBallCountInput() {
+		cp5.addTextlabel("ballCountLabel")
+			.setText("Number of people:")
+			.setPosition(8, BOTTOM_LINE_POS + 34)
 			.setColorValue(color(0))
 			.setFont(SFFont_14);
+		ballCountTextField = cp5.addTextfield("ballCountInput")
+			.setLabel("")
+			.setPosition(200, BOTTOM_LINE_POS + 32)
+			.setSize(50, 20)
+			.setFont(SFFont_14)
+			.setColorBackground(color(#FFFFFF))
+			.setColor(0);
 	}
 
 	// Create visual components
@@ -99,7 +120,7 @@ class Window implements CompletionCallback {
 	ArrayList<Ball> createBalls() {
 	    ArrayList<Ball> balls = new ArrayList<Ball>();
 	    balls.add(new Ball(random(SCREEN_WIDTH), random(TOP_LINE_POS, BOTTOM_LINE_POS)));
-	    while(balls.size() < BALL_COUNT) {
+	    while(balls.size() < ballCount) {
 	        Ball newBall = new Ball(random(SCREEN_WIDTH), random(TOP_LINE_POS, BOTTOM_LINE_POS));
 	        boolean overlapping = false;
 	        for (int j = 0; j < balls.size(); j++) {
@@ -129,7 +150,7 @@ class Window implements CompletionCallback {
 	// Utility
 
 	void updateBalls(ArrayList<Ball> balls) {
-	    int infectedId = (int)random(BALL_COUNT);
+	    int infectedId = (int)random(ballCount);
 	    for (int i = 0; i < balls.size(); i++) {
 	        Ball ball = balls.get(i);
 	        ball.update(i,balls);
