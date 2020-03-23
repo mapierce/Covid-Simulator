@@ -31,7 +31,6 @@ class Window implements CompletionCallback {
 	}
 
 	void setup() {
-		setupResetButton();
 		setupMoveOnInfectedToggle();
 	}
 
@@ -51,25 +50,20 @@ class Window implements CompletionCallback {
         stroke(0);
         line(0, TOP_LINE_POS, width, TOP_LINE_POS);
         line(0, BOTTOM_LINE_POS, width, BOTTOM_LINE_POS);
-        updateCountText();
+    	updateCountText();
         chart.display(healthyCount, infectedCount, recoveredCount);
         handleResetOverlay();
         // timer.updateWithCounts(healthyCount, infectedCount, recoveredCount); - Call to time the simulation
 	}
 
-	// GUI
-
-	void setupResetButton() {
-		resetButton = cp5.addButton("reset")
-			.setValue(1)
-			.setFont(SFFont_14)
-			.setPosition((SCREEN_WIDTH / 2) - (RESET_BUTTON_WIDTH / 2), SCREEN_HEIGHT / 2)
-			.setSize(RESET_BUTTON_WIDTH, RESET_BUTTON_HEIGHT).onPress(new CallbackListener() {
-		    	public void controlEvent(CallbackEvent event) {
-		    		start();
-		    	}
-		    });
+	void mousePressed(int xPos, int yPos) {
+		if (xPos > 0 && xPos < width && yPos > TOP_LINE_POS && yPos < BOTTOM_LINE_POS && simulationComplete) {
+			loop();
+			start();
+		}
 	}
+
+	// GUI
 
 	void setupMoveOnInfectedToggle() {
 		toggle = cp5.addToggle("")
@@ -114,9 +108,11 @@ class Window implements CompletionCallback {
 		if (simulationComplete) {
 			fill(0, 0, 0, 200);
 			rect(0, TOP_LINE_POS, SCREEN_WIDTH, BOTTOM_LINE_POS - TOP_LINE_POS);
-			resetButton.show();
-		} else {
-			resetButton.hide();
+			textFont(SFFont_25);
+			fill(255);
+			textAlign(CENTER);
+			text("Click to reset", width/2, height/2);
+			noLoop();
 		}
 	}
 
@@ -128,7 +124,6 @@ class Window implements CompletionCallback {
 	        Ball ball = balls.get(i);
 	        ball.update(i,balls);
 	        if (i == infectedId) {
-	        	println("setting infected");
 	            ball.setHealthStatus(HealthStatus.INFECTED);
 	        }
 	    }
