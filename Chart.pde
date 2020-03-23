@@ -30,12 +30,14 @@ class Chart {
         this.completed = false;
     }
     
-    void display(int healthyCount, int infectedCount, int recoveredCount) {
+    void display(int healthyCount, int infectedCount, int recoveredCount, boolean gameOver) {
     	fill(#FFFFFF);
         rect(X_POS, Y_POS, chartWidth, CHART_HEIGHT);
-        updateHealthyPoints(healthyCount);
-        updateInfectedPoints(infectedCount);
-        updateRecoveredPoints(recoveredCount);
+        if (!gameOver) {
+            updateHealthyPoints(healthyCount);
+            updateInfectedPoints(infectedCount);
+            updateRecoveredPoints(recoveredCount);
+        }
         updateHealthyShape();
         updateInfectedShape();
         updateRecoveredShape();

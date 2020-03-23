@@ -18,7 +18,7 @@ class Window implements CompletionCallback {
 	private int healthyCount;
 	private int recoveredCount;
 	private int infectedCount;
-	private boolean simulationComplete;
+	private boolean simulationComplete = true;
 	private Chart chart;
 	private ArrayList<Ball> balls;
 	private SimulationTimer timer = new SimulationTimer();
@@ -31,39 +31,51 @@ class Window implements CompletionCallback {
 	}
 
 	void setup() {
+		setupResetButton();
 		setupMoveOnInfectedToggle();
 	}
 
-	void start() {
-		simulationComplete = false;
+	void resetView() {
 		balls = createBalls();
 	    chart = new Chart((int)BALL_COUNT, FRAME_RATE, this);
 	}
 
+	void start() {
+		simulationComplete = false;
+	}
+
 	void drawWindow() {
-        for (Ball ball : balls) {
-            ball.display();
-            ball.updateLocation(toggle.getValue() == 1.0);
-            ball.checkBoundaryCollision();
-            ball.checkCollision();
-        }
-        stroke(0);
+		if (!simulationComplete) {
+	        for (Ball ball : balls) {
+	            ball.display();
+	            ball.updateLocation(toggle.getValue() == 1.0);
+	            ball.checkBoundaryCollision();
+	            ball.checkCollision();
+	        }
+	    }
+	    stroke(0);
         line(0, TOP_LINE_POS, width, TOP_LINE_POS);
         line(0, BOTTOM_LINE_POS, width, BOTTOM_LINE_POS);
     	updateCountText();
-        chart.display(healthyCount, infectedCount, recoveredCount);
+        chart.display(healthyCount, infectedCount, recoveredCount, simulationComplete);
         handleResetOverlay();
         // timer.updateWithCounts(healthyCount, infectedCount, recoveredCount); - Call to time the simulation
 	}
 
-	void mousePressed(int xPos, int yPos) {
-		if (xPos > 0 && xPos < width && yPos > TOP_LINE_POS && yPos < BOTTOM_LINE_POS && simulationComplete) {
-			loop();
-			start();
-		}
-	}
-
 	// GUI
+
+	void setupResetButton() {
+		resetButton = cp5.addButton("START")
+			.setValue(1)
+			.setFont(SFFont_14)
+			.setPosition((SCREEN_WIDTH / 2) - (RESET_BUTTON_WIDTH / 2), SCREEN_HEIGHT / 2)
+			.setSize(RESET_BUTTON_WIDTH, RESET_BUTTON_HEIGHT).onPress(new CallbackListener() {
+		    	public void controlEvent(CallbackEvent event) {
+		    		resetView();
+		    		start();
+		    	}
+		    });
+	}
 
 	void setupMoveOnInfectedToggle() {
 		toggle = cp5.addToggle("")
@@ -108,11 +120,9 @@ class Window implements CompletionCallback {
 		if (simulationComplete) {
 			fill(0, 0, 0, 200);
 			rect(0, TOP_LINE_POS, SCREEN_WIDTH, BOTTOM_LINE_POS - TOP_LINE_POS);
-			textFont(SFFont_25);
-			fill(255);
-			textAlign(CENTER);
-			text("Click to start", width/2, height/2);
-			noLoop();
+			resetButton.show();	
+		} else {
+			resetButton.hide();
 		}
 	}
 
@@ -134,7 +144,6 @@ class Window implements CompletionCallback {
 	    getCounts();
 	    fill(#45D69A);
 	    textSize(25);
-	    textAlign(LEFT);
 	    text("Healthy: " + healthyCount, 10, 25);
 	    fill(#F45B69);
 	    textSize(25);
