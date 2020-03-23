@@ -22,14 +22,7 @@ class Window implements CompletionCallback {
 	}
 
 	void setup() {
-		resetButton = cp5.addButton("reset")
-			.setValue(1)
-			.setPosition((SCREEN_WIDTH / 2) - 50, SCREEN_HEIGHT / 2)
-			.setSize(100, 40).onPress(new CallbackListener() {
-		    	public void controlEvent(CallbackEvent event) {
-		    		start();
-		    	}
-		    });
+		setupResetButton();
 	}
 
 	void start() {
@@ -51,6 +44,19 @@ class Window implements CompletionCallback {
         chart.display(healthyCount, infectedCount, recoveredCount);
         handleResetOverlay();
         // timer.updateWithCounts(healthyCount, infectedCount, recoveredCount); - Call to time the simulation
+	}
+
+	// GUI
+
+	void setupResetButton() {
+		resetButton = cp5.addButton("reset")
+			.setValue(1)
+			.setPosition((SCREEN_WIDTH / 2) - (RESET_BUTTON_WIDTH / 2), SCREEN_HEIGHT / 2)
+			.setSize(RESET_BUTTON_WIDTH, RESET_BUTTON_HEIGHT).onPress(new CallbackListener() {
+		    	public void controlEvent(CallbackEvent event) {
+		    		start();
+		    	}
+		    });
 	}
 
 	// Create visual components
