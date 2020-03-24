@@ -157,10 +157,10 @@ class Ball {
     
     color getColor() {
         switch(healthStatus) {
-            case HEALTHY: return #45d69a;
-            case INFECTED: return #F45B69;
-            case RECOVERED: return #B4ADEA;
-            default: return #FFFFFF;
+            case HEALTHY: return Constants.Color.COVID_GREEN;
+            case INFECTED: return Constants.Color.COVID_RED;
+            case RECOVERED: return Constants.Color.COVID_PURPLE;
+            default: return Constants.Color.WHITE;
         } 
     }
     

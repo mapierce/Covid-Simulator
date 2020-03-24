@@ -31,4 +31,14 @@ static class Constants {
 
 	}
 
+	static class Color {
+
+		final static int BLACK = 0;
+		final static int WHITE = 255;
+		final static int COVID_GREEN = #45D69A;
+		final static int COVID_RED = #F45B69;
+		final static int COVID_PURPLE = #B4ADEA;
+
+	}
+
 }

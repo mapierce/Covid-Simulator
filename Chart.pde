@@ -30,7 +30,7 @@ class Chart {
     }
     
     void display(int healthyCount, int infectedCount, int recoveredCount, boolean gameOver) {
-    	fill(#FFFFFF);
+    	fill(Constants.Color.WHITE);
         rect(X_POS, Y_POS, chartWidth, CHART_HEIGHT);
         if (!gameOver) {
             updateHealthyPoints(healthyCount);
@@ -49,7 +49,7 @@ class Chart {
     	float xPos = 0;
     	healthyArea = createShape();
         healthyArea.beginShape();
-        healthyArea.fill(#45D69A);
+        healthyArea.fill(Constants.Color.COVID_GREEN);
         healthyArea.vertex(0, 0);
         healthyArea.vertex(0, CHART_HEIGHT);
         xPos = xInterval * healthyPoints.size() < chartWidth ? xInterval * healthyPoints.size() : chartWidth;
@@ -66,7 +66,7 @@ class Chart {
         float xPos = 0;
         infectedArea = createShape();
         infectedArea.beginShape();
-        infectedArea.fill(#F45B69);
+        infectedArea.fill(Constants.Color.COVID_RED);
         infectedArea.vertex(xPos, CHART_HEIGHT);
         for(Integer point : infectedPoints) {
         	if (xPos < chartWidth) {
@@ -83,7 +83,7 @@ class Chart {
     	float xPos = 0;
     	recoveredArea = createShape();
         recoveredArea.beginShape();
-        recoveredArea.fill(#B4ADEA);
+        recoveredArea.fill(Constants.Color.COVID_PURPLE);
         recoveredArea.vertex(xPos, 0);
         for(Integer point : recoveredPoints) {
         	if (xPos < chartWidth) {

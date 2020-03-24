@@ -47,7 +47,7 @@ class Window implements CompletionCallback, GuiCallback {
 	            ball.checkCollision();
 	        }
 	    }
-	    stroke(0);
+	    stroke(Constants.Color.BLACK);
         line(0, TOP_LINE_POS, Constants.View.SCREEN_WIDTH, TOP_LINE_POS);
         line(0, Constants.View.BOTTOM_LINE_POS, Constants.View.SCREEN_WIDTH, Constants.View.BOTTOM_LINE_POS);
     	updateCountText();
@@ -103,13 +103,13 @@ class Window implements CompletionCallback, GuiCallback {
 	void updateCountText() {
 		textFont(SFFont_25);
 	    getCounts();
-	    fill(#45D69A);
+	    fill(Constants.Color.COVID_GREEN);
 	    textSize(25);
 	    text("Healthy: " + healthyCount, 10, 25);
-	    fill(#F45B69);
+	    fill(Constants.Color.COVID_RED);
 	    textSize(25);
 	    text("Infected: " + infectedCount, 10, 55);
-	    fill(#B4ADEA);
+	    fill(Constants.Color.COVID_PURPLE);
 	    textSize(25);
 	    text("Recovered: " + recoveredCount, 10, 85);
 	}

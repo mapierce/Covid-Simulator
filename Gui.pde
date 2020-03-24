@@ -44,7 +44,7 @@ class Gui {
 		moveInfectedToggleLabel = cp5.addTextlabel("stopMovingInfectedLabel")
 			.setText("Stop moving when infected:")
 			.setPosition(Constants.Gui.COL_ONE_LABEL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
-			.setColorValue(color(0))
+			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
 		moveInfectedToggle = cp5.addToggle("infectedToggle")
 			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_CONTROL_PADDING)
@@ -52,24 +52,24 @@ class Gui {
 			.setLabel("")
 			.setValue(true)
 			.setMode(ControlP5.SWITCH)
-			.setColorBackground(color(255))
-			.setColorForeground(color(#45D69A))
-			.setColorActive(#45D69A);
+			.setColorBackground(color(Constants.Color.WHITE))
+			.setColorForeground(Constants.Color.COVID_GREEN)
+			.setColorActive(Constants.Color.COVID_GREEN);
 	}
 
 	void setupBallCountInput() {
 		ballCountTextFieldLabel = cp5.addTextlabel("ballCountLabel")
 			.setText("Number of people:")
 			.setPosition(Constants.Gui.COL_ONE_LABEL_X, moveInfectedToggleLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
-			.setColorValue(color(0))
+			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
 		ballCountTextField = cp5.addTextfield("ballCountInput")
 			.setLabel("")
 			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, moveInfectedToggle.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
 			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT)
 			.setFont(SFFont_14)
-			.setColorBackground(color(#FFFFFF))
-			.setColor(0);
+			.setColorBackground(color(Constants.Color.WHITE))
+			.setColor(Constants.Color.BLACK);
 		setDefaultBallCount();
 	}
 
@@ -77,15 +77,15 @@ class Gui {
 		cp5.addTextlabel("secondsInputLabel")
 			.setText("Simulation duration (seconds):")
 			.setPosition(Constants.Gui.COL_ONE_LABEL_X, ballCountTextFieldLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
-			.setColorValue(color(0))
+			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
 		secondsInputTextField = cp5.addTextfield("secondsInput")
 			.setLabel("")
 			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, ballCountTextField.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
 			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT)
 			.setFont(SFFont_14)
-			.setColorBackground(color(#FFFFFF))
-			.setColor(0);
+			.setColorBackground(color(Constants.Color.WHITE))
+			.setColor(Constants.Color.BLACK);
 		setDefaultDuration();
 	}
 
