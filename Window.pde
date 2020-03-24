@@ -2,19 +2,27 @@ import controlP5.*;
 
 class Window implements CompletionCallback {
 
-	final float BALL_COUNT = 400;
+	final int DEFAULT_BALL_COUNT = 400;
+	final int DEFAULT_TOTAL_SECONDS = 40;
 	final int TOP_LINE_POS = 100;
 	final int BOTTOM_LINE_POS = 700;
 	final int RESET_BUTTON_WIDTH = 100;
-	final int RESET_BUTTON_HEIGHT = 40;
+	final int RESET_BUTTON_HEIGHT = 60;
 
 	private PApplet applet;
 	private ControlP5 cp5;
 	private controlP5.Button resetButton;
+	private Toggle moveInfectedToggle;
+	private Textfield ballCountTextField;
+	private Textfield secondsInputTextField;
+
+	private int ballCount;
+	private PFont SFFont_25;
+	private PFont SFFont_14;
 	private int healthyCount;
 	private int recoveredCount;
 	private int infectedCount;
-	private boolean simulationComplete;
+	private boolean simulationComplete = true;
 	private Chart chart;
 	private ArrayList<Ball> balls;
 	private SimulationTimer timer = new SimulationTimer();
@@ -22,30 +30,44 @@ class Window implements CompletionCallback {
 	Window(PApplet applet) {
 		this.applet = applet;
 		this.cp5 = new ControlP5(applet);
+		this.SFFont_25 = loadFont("SFProDisplay-Light-25.vlw");
+		this.SFFont_14 = loadFont("SFProDisplay-Light-14.vlw");
 	}
 
 	void setup() {
 		setupResetButton();
+		setupMoveOnInfectedToggle();
+		setupBallCountInput();
+		setupTimeInput();
+		setDefaultBallCount();
+		setDefaultDuration();
+	}
+
+	void resetView() {
+		getBallCountFromTextField();
+		int seconds = getDurationFromTextField();
+		balls = createBalls();
+	    chart = new Chart(ballCount, FRAME_RATE, seconds, this);
 	}
 
 	void start() {
 		simulationComplete = false;
-		balls = createBalls();
-	    chart = new Chart((int)BALL_COUNT, FRAME_RATE, this);
 	}
 
 	void drawWindow() {
-        for (Ball ball : balls) {
-            ball.display();
-            ball.updateLocation();
-            ball.checkBoundaryCollision();
-            ball.checkCollision();
-        }
-        stroke(0);
+		if (!simulationComplete) {
+	        for (Ball ball : balls) {
+	            ball.display();
+	            ball.updateLocation(moveInfectedToggle.getValue() == 1.0);
+	            ball.checkBoundaryCollision();
+	            ball.checkCollision();
+	        }
+	    }
+	    stroke(0);
         line(0, TOP_LINE_POS, width, TOP_LINE_POS);
         line(0, BOTTOM_LINE_POS, width, BOTTOM_LINE_POS);
-        updateCountText();
-        chart.display(healthyCount, infectedCount, recoveredCount);
+    	updateCountText();
+        chart.display(healthyCount, infectedCount, recoveredCount, simulationComplete);
         handleResetOverlay();
         // timer.updateWithCounts(healthyCount, infectedCount, recoveredCount); - Call to time the simulation
 	}
@@ -53,14 +75,91 @@ class Window implements CompletionCallback {
 	// GUI
 
 	void setupResetButton() {
-		resetButton = cp5.addButton("reset")
+		resetButton = cp5.addButton("START")
 			.setValue(1)
+			.setFont(SFFont_14)
 			.setPosition((SCREEN_WIDTH / 2) - (RESET_BUTTON_WIDTH / 2), SCREEN_HEIGHT / 2)
 			.setSize(RESET_BUTTON_WIDTH, RESET_BUTTON_HEIGHT).onPress(new CallbackListener() {
 		    	public void controlEvent(CallbackEvent event) {
+		    		resetView();
 		    		start();
 		    	}
 		    });
+	}
+
+	void setupMoveOnInfectedToggle() {
+		cp5.addTextlabel("stopMovingInfectedLabel")
+			.setText("Stop moving when infected:")
+			.setPosition(8, BOTTOM_LINE_POS + 12)
+			.setColorValue(color(0))
+			.setFont(SFFont_14);
+		moveInfectedToggle = cp5.addToggle("infectedToggle")
+			.setPosition(200, BOTTOM_LINE_POS + 8)
+			.setSize(50, 20)
+			.setLabel("")
+			.setValue(true)
+			.setMode(ControlP5.SWITCH)
+			.setColorBackground(color(255))
+			.setColorForeground(color(#45D69A))
+			.setColorActive(#45D69A);
+	}
+
+	void setupBallCountInput() {
+		cp5.addTextlabel("ballCountLabel")
+			.setText("Number of people:")
+			.setPosition(8, BOTTOM_LINE_POS + 34)
+			.setColorValue(color(0))
+			.setFont(SFFont_14);
+		ballCountTextField = cp5.addTextfield("ballCountInput")
+			.setLabel("")
+			.setPosition(200, BOTTOM_LINE_POS + 32)
+			.setSize(50, 20)
+			.setFont(SFFont_14)
+			.setColorBackground(color(#FFFFFF))
+			.setColor(0);
+	}
+
+	void setupTimeInput() {
+		cp5.addTextlabel("secondsInputLabel")
+			.setText("Simulation duration (seconds):")
+			.setPosition(8, BOTTOM_LINE_POS + 56)
+			.setColorValue(color(0))
+			.setFont(SFFont_14);
+		secondsInputTextField = cp5.addTextfield("secondsInput")
+			.setLabel("")
+			.setPosition(200, BOTTOM_LINE_POS + 56)
+			.setSize(50, 20)
+			.setFont(SFFont_14)
+			.setColorBackground(color(#FFFFFF))
+			.setColor(0);
+	}
+
+	void setDefaultBallCount() {
+		ballCountTextField.setText(Integer.toString(DEFAULT_BALL_COUNT));
+	}
+
+	void setDefaultDuration() {
+		secondsInputTextField.setText(Integer.toString(DEFAULT_TOTAL_SECONDS));
+	}
+
+	void getBallCountFromTextField() {
+		String ballCountText = ballCountTextField.getText();
+		if (Utility.isInteger(ballCountText)) {
+			ballCount = Integer.parseInt(ballCountText);
+		} else {
+			ballCount = DEFAULT_BALL_COUNT;
+			setDefaultBallCount();
+		}
+	}
+
+	int getDurationFromTextField() {
+		String secondsText = secondsInputTextField.getText();
+		if (Utility.isInteger(secondsText)) {
+			return Integer.parseInt(secondsText);
+		} else {
+			setDefaultDuration();
+			return DEFAULT_TOTAL_SECONDS;
+		}
 	}
 
 	// Create visual components
@@ -68,7 +167,7 @@ class Window implements CompletionCallback {
 	ArrayList<Ball> createBalls() {
 	    ArrayList<Ball> balls = new ArrayList<Ball>();
 	    balls.add(new Ball(random(SCREEN_WIDTH), random(TOP_LINE_POS, BOTTOM_LINE_POS)));
-	    while(balls.size() < BALL_COUNT) {
+	    while(balls.size() < ballCount) {
 	        Ball newBall = new Ball(random(SCREEN_WIDTH), random(TOP_LINE_POS, BOTTOM_LINE_POS));
 	        boolean overlapping = false;
 	        for (int j = 0; j < balls.size(); j++) {
@@ -89,7 +188,7 @@ class Window implements CompletionCallback {
 		if (simulationComplete) {
 			fill(0, 0, 0, 200);
 			rect(0, TOP_LINE_POS, SCREEN_WIDTH, BOTTOM_LINE_POS - TOP_LINE_POS);
-			resetButton.show();
+			resetButton.show();	
 		} else {
 			resetButton.hide();
 		}
@@ -98,7 +197,7 @@ class Window implements CompletionCallback {
 	// Utility
 
 	void updateBalls(ArrayList<Ball> balls) {
-	    int infectedId = (int)random(BALL_COUNT);
+	    int infectedId = (int)random(ballCount);
 	    for (int i = 0; i < balls.size(); i++) {
 	        Ball ball = balls.get(i);
 	        ball.update(i,balls);
@@ -109,6 +208,7 @@ class Window implements CompletionCallback {
 	}
 
 	void updateCountText() {
+		textFont(SFFont_25);
 	    getCounts();
 	    fill(#45D69A);
 	    textSize(25);

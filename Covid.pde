@@ -12,7 +12,7 @@ void setup() {
     frameRate(FRAME_RATE);
     window = new Window(this);
     window.setup();
-    window.start();
+    window.resetView();
 }
 
 void draw() {

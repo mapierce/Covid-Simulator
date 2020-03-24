@@ -49,7 +49,10 @@ class Ball {
         circle(location.x,location.y,RADIUS * 2);
     }
     
-    void updateLocation() {
+    void updateLocation(boolean allowMovement) {
+        if (!allowMovement && healthStatus == HealthStatus.INFECTED) {
+            return;
+        }
         location.add(velocity);
     }
     
