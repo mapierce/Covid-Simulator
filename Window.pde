@@ -1,51 +1,37 @@
 import controlP5.*;
 
-class Window implements CompletionCallback {
+class Window implements CompletionCallback, GuiCallback {
 
 	final int TOP_LINE_POS = 100;
-	final int BOTTOM_LINE_POS = 700;
 	final int RESET_BUTTON_WIDTH = 100;
 	final int RESET_BUTTON_HEIGHT = 60;
 
-	private PApplet applet;
-	private ControlP5 cp5;
-	private controlP5.Button resetButton;
-	private Toggle moveInfectedToggle;
-	private Textfield ballCountTextField;
-	private Textfield secondsInputTextField;
-
 	private int ballCount;
-	private PFont SFFont_25;
-	private PFont SFFont_14;
 	private int healthyCount;
 	private int recoveredCount;
 	private int infectedCount;
 	private boolean simulationComplete = true;
 	private Chart chart;
 	private ArrayList<Ball> balls;
-	private SimulationTimer timer = new SimulationTimer();
+	private PFont SFFont_25;
+	private PFont SFFont_14;
+
+	private Gui gui;
 
 	Window(PApplet applet) {
-		this.applet = applet;
-		this.cp5 = new ControlP5(applet);
+		this.gui = new Gui(applet, this);
 		this.SFFont_25 = loadFont("SFProDisplay-Light-25.vlw");
 		this.SFFont_14 = loadFont("SFProDisplay-Light-14.vlw");
 	}
 
 	void setup() {
-		setupResetButton();
-		setupMoveOnInfectedToggle();
-		setupBallCountInput();
-		setupTimeInput();
-		setDefaultBallCount();
-		setDefaultDuration();
+		gui.setupGui();
 	}
 
 	void resetView() {
-		getBallCountFromTextField();
-		int seconds = getDurationFromTextField();
+		ballCount = gui.getBallCountFromTextField();
 		balls = createBalls();
-	    chart = new Chart(ballCount, seconds, this);
+	    chart = new Chart(ballCount, gui.getDurationFromTextField(), this);
 	}
 
 	void start() {
@@ -56,116 +42,26 @@ class Window implements CompletionCallback {
 		if (!simulationComplete) {
 	        for (Ball ball : balls) {
 	            ball.display();
-	            ball.updateLocation(moveInfectedToggle.getValue() == 1.0);
+	            ball.updateLocation(gui.moveOnInfectedToggleValue());
 	            ball.checkBoundaryCollision();
 	            ball.checkCollision();
 	        }
 	    }
 	    stroke(0);
         line(0, TOP_LINE_POS, Constants.View.SCREEN_WIDTH, TOP_LINE_POS);
-        line(0, BOTTOM_LINE_POS, Constants.View.SCREEN_WIDTH, BOTTOM_LINE_POS);
+        line(0, Constants.View.BOTTOM_LINE_POS, Constants.View.SCREEN_WIDTH, Constants.View.BOTTOM_LINE_POS);
     	updateCountText();
         chart.display(healthyCount, infectedCount, recoveredCount, simulationComplete);
         handleResetOverlay();
-	}
-
-	// GUI
-
-	void setupResetButton() {
-		resetButton = cp5.addButton("START")
-			.setValue(1)
-			.setFont(SFFont_14)
-			.setPosition((Constants.View.SCREEN_WIDTH / 2) - (RESET_BUTTON_WIDTH / 2), Constants.View.SCREEN_HEIGHT / 2)
-			.setSize(RESET_BUTTON_WIDTH, RESET_BUTTON_HEIGHT).onPress(new CallbackListener() {
-		    	public void controlEvent(CallbackEvent event) {
-		    		resetView();
-		    		start();
-		    	}
-		    });
-	}
-
-	void setupMoveOnInfectedToggle() {
-		cp5.addTextlabel("stopMovingInfectedLabel")
-			.setText("Stop moving when infected:")
-			.setPosition(8, BOTTOM_LINE_POS + 12)
-			.setColorValue(color(0))
-			.setFont(SFFont_14);
-		moveInfectedToggle = cp5.addToggle("infectedToggle")
-			.setPosition(200, BOTTOM_LINE_POS + 8)
-			.setSize(50, 20)
-			.setLabel("")
-			.setValue(true)
-			.setMode(ControlP5.SWITCH)
-			.setColorBackground(color(255))
-			.setColorForeground(color(#45D69A))
-			.setColorActive(#45D69A);
-	}
-
-	void setupBallCountInput() {
-		cp5.addTextlabel("ballCountLabel")
-			.setText("Number of people:")
-			.setPosition(8, BOTTOM_LINE_POS + 34)
-			.setColorValue(color(0))
-			.setFont(SFFont_14);
-		ballCountTextField = cp5.addTextfield("ballCountInput")
-			.setLabel("")
-			.setPosition(200, BOTTOM_LINE_POS + 32)
-			.setSize(50, 20)
-			.setFont(SFFont_14)
-			.setColorBackground(color(#FFFFFF))
-			.setColor(0);
-	}
-
-	void setupTimeInput() {
-		cp5.addTextlabel("secondsInputLabel")
-			.setText("Simulation duration (seconds):")
-			.setPosition(8, BOTTOM_LINE_POS + 56)
-			.setColorValue(color(0))
-			.setFont(SFFont_14);
-		secondsInputTextField = cp5.addTextfield("secondsInput")
-			.setLabel("")
-			.setPosition(200, BOTTOM_LINE_POS + 56)
-			.setSize(50, 20)
-			.setFont(SFFont_14)
-			.setColorBackground(color(#FFFFFF))
-			.setColor(0);
-	}
-
-	void setDefaultBallCount() {
-		ballCountTextField.setText(Integer.toString(Constants.Simulator.DEFAULT_BALL_COUNT));
-	}
-
-	void setDefaultDuration() {
-		secondsInputTextField.setText(Integer.toString(Constants.Simulator.DEFAULT_TOTAL_SECONDS));
-	}
-
-	void getBallCountFromTextField() {
-		String ballCountText = ballCountTextField.getText();
-		if (Utility.isInteger(ballCountText)) {
-			ballCount = Integer.parseInt(ballCountText);
-		} else {
-			ballCount = Constants.Simulator.DEFAULT_BALL_COUNT;
-			setDefaultBallCount();
-		}
-	}
-
-	int getDurationFromTextField() {
-		String secondsText = secondsInputTextField.getText();
-		if (Utility.isInteger(secondsText)) {
-			return Integer.parseInt(secondsText);
-		} else {
-			setDefaultDuration();
-			return Constants.Simulator.DEFAULT_TOTAL_SECONDS;
-		}
 	}
 
 	// Create visual components
 
 	ArrayList<Ball> createBalls() {
 	    ArrayList<Ball> balls = new ArrayList<Ball>();
-	    balls.add(new Ball(random(Constants.View.SCREEN_WIDTH), random(TOP_LINE_POS, BOTTOM_LINE_POS)));
+	    balls.add(new Ball(random(Constants.View.SCREEN_WIDTH), random(TOP_LINE_POS, Constants.View.BOTTOM_LINE_POS)));
 	    while(balls.size() < ballCount) {
-	        Ball newBall = new Ball(random(Constants.View.SCREEN_WIDTH), random(TOP_LINE_POS, BOTTOM_LINE_POS));
+	        Ball newBall = new Ball(random(Constants.View.SCREEN_WIDTH), random(TOP_LINE_POS, Constants.View.BOTTOM_LINE_POS));
 	        boolean overlapping = false;
 	        for (int j = 0; j < balls.size(); j++) {
 	            if (newBall.overlapsWith(balls.get(j))) {
@@ -184,10 +80,10 @@ class Window implements CompletionCallback {
 	void handleResetOverlay() {
 		if (simulationComplete) {
 			fill(0, 0, 0, 200);
-			rect(0, TOP_LINE_POS, Constants.View.SCREEN_WIDTH, BOTTOM_LINE_POS - TOP_LINE_POS);
-			resetButton.show();	
+			rect(0, TOP_LINE_POS, Constants.View.SCREEN_WIDTH, Constants.View.BOTTOM_LINE_POS - TOP_LINE_POS);
+			gui.showResetButton(true);
 		} else {
-			resetButton.hide();
+			gui.showResetButton(false);
 		}
 	}
 
@@ -240,6 +136,13 @@ class Window implements CompletionCallback {
 
 	void simulationComplete() {
 		simulationComplete = !simulationComplete;
+	}
+
+	// GuiCallback functions
+
+	void resetButtonTapped() {
+		resetView();
+		start();
 	}
 	
 }

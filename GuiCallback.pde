@@ -1,0 +1,5 @@
+interface GuiCallback {
+
+	void resetButtonTapped();
+	
+}
