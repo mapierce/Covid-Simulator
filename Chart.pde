@@ -5,7 +5,6 @@ class Chart {
     final int Y_POS = 10;
     final int CHART_HEIGHT = 80;
     final int RIGHT_PADDING = 50;
-    final int TOTAL_SECONDS = 40;
 
     // Private variables
     private CompletionCallback delegate;
@@ -21,11 +20,11 @@ class Chart {
     private float xInterval;
     private boolean completed;
 
-    Chart(int totalItemCount, int frameRate, CompletionCallback delegate) {
+    Chart(int totalItemCount, int frameRate, int duration, CompletionCallback delegate) {
         this.delegate = delegate;
         this.chartWidth = width - (X_POS + RIGHT_PADDING);
     	this.totalItemCount = totalItemCount;
-    	this.totalCalls = frameRate * TOTAL_SECONDS;
+    	this.totalCalls = frameRate * duration;
     	this.xInterval = (float)chartWidth / (float)totalCalls;
         this.completed = false;
     }

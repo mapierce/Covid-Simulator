@@ -2,7 +2,8 @@ import controlP5.*;
 
 class Window implements CompletionCallback {
 
-	final float DEFAULT_BALL_COUNT = 400;
+	final int DEFAULT_BALL_COUNT = 400;
+	final int DEFAULT_TOTAL_SECONDS = 40;
 	final int TOP_LINE_POS = 100;
 	final int BOTTOM_LINE_POS = 700;
 	final int RESET_BUTTON_WIDTH = 100;
@@ -13,8 +14,9 @@ class Window implements CompletionCallback {
 	private controlP5.Button resetButton;
 	private Toggle moveInfectedToggle;
 	private Textfield ballCountTextField;
+	private Textfield secondsInputTextField;
 
-	private float ballCount;
+	private int ballCount;
 	private PFont SFFont_25;
 	private PFont SFFont_14;
 	private int healthyCount;
@@ -36,13 +38,16 @@ class Window implements CompletionCallback {
 		setupResetButton();
 		setupMoveOnInfectedToggle();
 		setupBallCountInput();
+		setupTimeInput();
+		setDefaultBallCount();
+		setDefaultDuration();
 	}
 
 	void resetView() {
-		String ballCountText = ballCountTextField.getText();
-		ballCount = Utility.isInteger(ballCountText) ? Float.parseFloat(ballCountText) : DEFAULT_BALL_COUNT;
+		getBallCountFromTextField();
+		int seconds = getDurationFromTextField();
 		balls = createBalls();
-	    chart = new Chart((int)ballCount, FRAME_RATE, this);
+	    chart = new Chart(ballCount, FRAME_RATE, seconds, this);
 	}
 
 	void start() {
@@ -90,14 +95,13 @@ class Window implements CompletionCallback {
 			.setFont(SFFont_14);
 		moveInfectedToggle = cp5.addToggle("infectedToggle")
 			.setPosition(200, BOTTOM_LINE_POS + 8)
-			.setSize(20, 20)
+			.setSize(50, 20)
 			.setLabel("")
 			.setValue(true)
 			.setMode(ControlP5.SWITCH)
 			.setColorBackground(color(255))
 			.setColorForeground(color(#45D69A))
 			.setColorActive(#45D69A);
-		
 	}
 
 	void setupBallCountInput() {
@@ -113,6 +117,49 @@ class Window implements CompletionCallback {
 			.setFont(SFFont_14)
 			.setColorBackground(color(#FFFFFF))
 			.setColor(0);
+	}
+
+	void setupTimeInput() {
+		cp5.addTextlabel("secondsInputLabel")
+			.setText("Simulation duration (seconds):")
+			.setPosition(8, BOTTOM_LINE_POS + 56)
+			.setColorValue(color(0))
+			.setFont(SFFont_14);
+		secondsInputTextField = cp5.addTextfield("secondsInput")
+			.setLabel("")
+			.setPosition(200, BOTTOM_LINE_POS + 56)
+			.setSize(50, 20)
+			.setFont(SFFont_14)
+			.setColorBackground(color(#FFFFFF))
+			.setColor(0);
+	}
+
+	void setDefaultBallCount() {
+		ballCountTextField.setText(Integer.toString(DEFAULT_BALL_COUNT));
+	}
+
+	void setDefaultDuration() {
+		secondsInputTextField.setText(Integer.toString(DEFAULT_TOTAL_SECONDS));
+	}
+
+	void getBallCountFromTextField() {
+		String ballCountText = ballCountTextField.getText();
+		if (Utility.isInteger(ballCountText)) {
+			ballCount = Integer.parseInt(ballCountText);
+		} else {
+			ballCount = DEFAULT_BALL_COUNT;
+			setDefaultBallCount();
+		}
+	}
+
+	int getDurationFromTextField() {
+		String secondsText = secondsInputTextField.getText();
+		if (Utility.isInteger(secondsText)) {
+			return Integer.parseInt(secondsText);
+		} else {
+			setDefaultDuration();
+			return DEFAULT_TOTAL_SECONDS;
+		}
 	}
 
 	// Create visual components
