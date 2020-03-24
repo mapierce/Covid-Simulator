@@ -1,15 +1,11 @@
-final int SCREEN_WIDTH = 1000;
-final int SCREEN_HEIGHT = 800;
-final int FRAME_RATE = 30;
-
 Window window;
 
 void settings() {
-    size(SCREEN_WIDTH, SCREEN_HEIGHT);
+    size(Constants.View.SCREEN_WIDTH, Constants.View.SCREEN_HEIGHT);
 }
 
 void setup() {
-    frameRate(FRAME_RATE);
+    frameRate(Constants.View.FRAME_RATE);
     window = new Window(this);
     window.setup();
     window.resetView();
@@ -17,5 +13,5 @@ void setup() {
 
 void draw() {
     background(240);
-    window.drawWindow();
+    window.drawWindow(mouseX, mouseY);
 }

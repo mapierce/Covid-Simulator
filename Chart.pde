@@ -20,11 +20,11 @@ class Chart {
     private float xInterval;
     private boolean completed;
 
-    Chart(int totalItemCount, int frameRate, int duration, CompletionCallback delegate) {
+    Chart(int totalItemCount, int duration, CompletionCallback delegate) {
         this.delegate = delegate;
-        this.chartWidth = width - (X_POS + RIGHT_PADDING);
+        this.chartWidth = Constants.View.SCREEN_WIDTH - (X_POS + RIGHT_PADDING);
     	this.totalItemCount = totalItemCount;
-    	this.totalCalls = frameRate * duration;
+    	this.totalCalls = Constants.View.FRAME_RATE * duration;
     	this.xInterval = (float)chartWidth / (float)totalCalls;
         this.completed = false;
     }
