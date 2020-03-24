@@ -4,6 +4,7 @@ class Gui {
 
 	private GuiCallback delegate;
 	private ControlP5 cp5;
+	private Button startButton;
 	private Button resetButton;
 	private Textlabel moveInfectedToggleLabel;
 	private Toggle moveInfectedToggle;
@@ -23,31 +24,45 @@ class Gui {
 	// GUI setup
 
 	void setupGui() {
+		setupStartButton();
 		setupResetButton();
 		setupMoveOnInfectedToggle();
 		setupBallCountInput();
 		setupTimeInput();
 	}
 
-	void setupResetButton() {
-		resetButton = cp5.addButton("START")
+	void setupStartButton() {
+		startButton = cp5.addButton("START")
 			.setFont(SFFont_14)
-			.setPosition((Constants.View.SCREEN_WIDTH / 2) - (Constants.Gui.RESET_BUTTON_WIDTH / 2), Constants.View.SCREEN_HEIGHT / 2)
-			.setSize(Constants.Gui.RESET_BUTTON_WIDTH, Constants.Gui.RESET_BUTTON_HEIGHT).onPress(new CallbackListener() {
+			.setPosition((Constants.View.SCREEN_WIDTH / 2) - (Constants.Gui.START_BUTTON_WIDTH / 2), Constants.View.SCREEN_HEIGHT / 2)
+			.setSize(Constants.Gui.START_BUTTON_WIDTH, Constants.Gui.START_BUTTON_HEIGHT)
+			.onPress(new CallbackListener() {
 		    	public void controlEvent(CallbackEvent event) {
-		    		delegate.resetButtonTapped();
+		    		delegate.startButtonTapped();
 		    	}
 		    });
+	}
+
+	void setupResetButton() {
+		resetButton = cp5.addButton("RESET")
+			.setFont(SFFont_14)
+			.setPosition((Constants.View.SCREEN_WIDTH - Constants.Gui.RESET_BUTTON_WIDTH - Constants.Gui.STANDARD_PADDING), (Constants.View.BOTTOM_LINE_POS + Constants.Gui.STANDARD_PADDING))
+			.setSize(Constants.Gui.RESET_BUTTON_WIDTH, (Constants.View.SCREEN_HEIGHT - Constants.View.BOTTOM_LINE_POS - (2 * Constants.Gui.STANDARD_PADDING)))
+			.onPress(new CallbackListener () {
+				public void controlEvent(CallbackEvent event) {
+					delegate.resetButtonTapped();
+				}
+			});
 	}
 
 	void setupMoveOnInfectedToggle() {
 		moveInfectedToggleLabel = cp5.addTextlabel("stopMovingInfectedLabel")
 			.setText("Stop moving when infected:")
-			.setPosition(Constants.Gui.COL_ONE_LABEL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
+			.setPosition(Constants.Gui.STANDARD_PADDING, Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
 			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
 		moveInfectedToggle = cp5.addToggle("infectedToggle")
-			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_CONTROL_PADDING)
+			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.STANDARD_PADDING)
 			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT)
 			.setLabel("")
 			.setValue(true)
@@ -60,7 +75,7 @@ class Gui {
 	void setupBallCountInput() {
 		ballCountTextFieldLabel = cp5.addTextlabel("ballCountLabel")
 			.setText("Number of people:")
-			.setPosition(Constants.Gui.COL_ONE_LABEL_X, moveInfectedToggleLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
+			.setPosition(Constants.Gui.STANDARD_PADDING, moveInfectedToggleLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
 			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
 		ballCountTextField = cp5.addTextfield("ballCountInput")
@@ -76,7 +91,7 @@ class Gui {
 	void setupTimeInput() {
 		cp5.addTextlabel("secondsInputLabel")
 			.setText("Simulation duration (seconds):")
-			.setPosition(Constants.Gui.COL_ONE_LABEL_X, ballCountTextFieldLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
+			.setPosition(Constants.Gui.STANDARD_PADDING, ballCountTextFieldLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
 			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
 		secondsInputTextField = cp5.addTextfield("secondsInput")
@@ -93,9 +108,9 @@ class Gui {
 
 	void showResetButton(boolean show) {
 		if (show) {
-			resetButton.show();
+			startButton.show();
 		} else {
-			resetButton.hide();
+			startButton.hide();
 		}
 	}
 

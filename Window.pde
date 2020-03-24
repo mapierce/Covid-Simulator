@@ -1,5 +1,3 @@
-import controlP5.*;
-
 class Window implements CompletionCallback, GuiCallback {
 
 	final int TOP_LINE_POS = 100;
@@ -140,9 +138,14 @@ class Window implements CompletionCallback, GuiCallback {
 
 	// GuiCallback functions
 
-	void resetButtonTapped() {
+	void startButtonTapped() {
 		resetView();
 		start();
 	}
-	
+
+	void resetButtonTapped() {
+		simulationComplete = true;
+		resetView();
+	}
+
 }
