@@ -12,7 +12,7 @@ static class Constants {
 	static class Simulator {
 
 		final static int DEFAULT_BALL_COUNT = 400;
-		final static int DEFAULT_TOTAL_SECONDS = 45;
+		final static int DEFAULT_TOTAL_SECONDS = 60;
 
 	}
 
@@ -27,7 +27,7 @@ static class Constants {
 		final static int TOP_LABEL_PADDING = 12;
 		final static int LABEL_SPACING = 22;
 		final static int CONTROL_SPACING = 24;
-		final static int INPUT_WIDTH = 50;
+		final static int INPUT_WIDTH = 100;
 		final static int INPUT_HEIGHT = 20;
 
 	}
