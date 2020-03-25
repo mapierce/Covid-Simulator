@@ -8,7 +8,7 @@ class Gui {
 	private Button resetButton;
 	private Textlabel moveInfectedToggleLabel;
 	private Slider moveInfectedSlider;
-	private Toggle moveInfectedToggle;
+	// private Toggle moveInfectedToggle;
 	private Textlabel ballCountTextFieldLabel;
 	private Textfield ballCountTextField;
 	private Textfield secondsInputTextField;
@@ -68,15 +68,6 @@ class Gui {
 			.setValue(50)
 			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.STANDARD_PADDING)
 			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
-		// moveInfectedToggle = cp5.addToggle("infectedToggle")
-		// 	.setPosition(Constants.Gui.COL_ONE_CONTROL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.STANDARD_PADDING)
-		// 	.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT)
-		// 	.setLabel("")
-		// 	.setValue(true)
-		// 	.setMode(ControlP5.SWITCH)
-		// 	.setColorBackground(color(Constants.Color.WHITE))
-		// 	.setColorForeground(Constants.Color.COVID_GREEN)
-		// 	.setColorActive(Constants.Color.COVID_GREEN);
 	}
 
 	void setupBallCountInput() {
@@ -123,10 +114,6 @@ class Gui {
 
 	float getInfectionMovementReduction() {
 		return moveInfectedSlider.getValue();
-	}
-
-	boolean moveOnInfectedToggleValue() {
-		return (moveInfectedToggle.getValue() == 1.0);
 	}
 
 	int getBallCountFromTextField() {

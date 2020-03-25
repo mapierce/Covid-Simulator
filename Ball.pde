@@ -16,7 +16,6 @@ class Ball {
     private HealthStatus healthStatus = HealthStatus.HEALTHY;
     private ArrayList<Ball> otherBalls;
     private float lastMovementReduction;
-    private boolean resetPace;
     
     // SETUP
 
@@ -28,7 +27,6 @@ class Ball {
         this.id = id;
         this.otherBalls = otherBalls;
         this.lastMovementReduction = 0.0;
-        this.resetPace = false;
     }
 
     // GETTERS & SETTERS
@@ -54,17 +52,6 @@ class Ball {
     }
     
     void updateLocation(float movementReduction) {
-        // if (!allowMovement && healthStatus == HealthStatus.INFECTED) {
-        //     return;
-        // }
-        // location.add(velocity);
-
-        // if (movementReduction > 0.0 && healthStatus == HealthStatus.INFECTED) {
-        //     velocity = slowVelocity;
-        // } else {
-        //     velocity = slowVelocity;
-        // }
-        // location.add(velocity);
         if (healthStatus == HealthStatus.INFECTED) {
             if (movementReduction == 100) return;
             if (movementReduction > 0.0 && movementReduction < 100.0 && movementReduction != lastMovementReduction) {
@@ -72,23 +59,7 @@ class Ball {
                 float percentage = 1 - (movementReduction / 100);
                 velocity = new PVector(velocity.x * percentage, velocity.y * percentage);
             }
-        } else if (healthStatus == HealthStatus.RECOVERED && !resetPace) {
-            resetPace = true;
-            float percentage = 1 - (lastMovementReduction / 100);
-            velocity = new PVector((velocity.x / percentage) * 100, (velocity.y / percentage) * 100); 
         }
-        // if (movementReduction == 100 && healthStatus == HealthStatus.INFECTED) {
-        //     return;
-        // } else if (movementReduction > 0.0 && movementReduction < 100 && healthStatus == HealthStatus.INFECTED) {
-        //     float percentage = 1 - (movementReduction / 100);
-        //     // PVector copy = standardVelocity.copy();
-        //     // velocity = copy.mult(percentage);
-        //     // velocity = new PVector(standardVelocity.x * percentage, standardVelocity.y * percentage);
-        //     println(standardVelocity + ": " + standardVelocity.copy().mult(percentage));
-        //     velocity = standardVelocity;
-        // } else if ((movementReduction == 0 && healthStatus == HealthStatus.INFECTED) || healthStatus != HealthStatus.INFECTED) {
-        //     velocity = standardVelocity;
-        // }
         location.add(velocity);
     }
     
