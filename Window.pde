@@ -40,7 +40,7 @@ class Window implements CompletionCallback, GuiCallback {
 		if (!simulationComplete) {
 	        for (Ball ball : balls) {
 	            ball.display();
-	            ball.updateLocation(gui.moveOnInfectedToggleValue());
+	            ball.updateLocation(gui.getInfectionMovementReduction());
 	            ball.checkBoundaryCollision();
 	            ball.checkCollision();
 	        }
