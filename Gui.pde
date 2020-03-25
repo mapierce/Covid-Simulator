@@ -7,6 +7,7 @@ class Gui {
 	private Button startButton;
 	private Button resetButton;
 	private Textlabel moveInfectedToggleLabel;
+	private Slider moveInfectedSlider;
 	private Toggle moveInfectedToggle;
 	private Textlabel ballCountTextFieldLabel;
 	private Textfield ballCountTextField;
@@ -57,19 +58,25 @@ class Gui {
 
 	void setupMoveOnInfectedToggle() {
 		moveInfectedToggleLabel = cp5.addTextlabel("stopMovingInfectedLabel")
-			.setText("Stop moving when infected:")
+			.setText("Slow infected movement by %:")
 			.setPosition(Constants.Gui.STANDARD_PADDING, Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
 			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
-		moveInfectedToggle = cp5.addToggle("infectedToggle")
-			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.STANDARD_PADDING)
-			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT)
+		moveInfectedSlider = cp5.addSlider("infectedSlider")
 			.setLabel("")
-			.setValue(true)
-			.setMode(ControlP5.SWITCH)
-			.setColorBackground(color(Constants.Color.WHITE))
-			.setColorForeground(Constants.Color.COVID_GREEN)
-			.setColorActive(Constants.Color.COVID_GREEN);
+			.setRange(0, 100)
+			.setValue(50)
+			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.STANDARD_PADDING)
+			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
+		// moveInfectedToggle = cp5.addToggle("infectedToggle")
+		// 	.setPosition(Constants.Gui.COL_ONE_CONTROL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.STANDARD_PADDING)
+		// 	.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT)
+		// 	.setLabel("")
+		// 	.setValue(true)
+		// 	.setMode(ControlP5.SWITCH)
+		// 	.setColorBackground(color(Constants.Color.WHITE))
+		// 	.setColorForeground(Constants.Color.COVID_GREEN)
+		// 	.setColorActive(Constants.Color.COVID_GREEN);
 	}
 
 	void setupBallCountInput() {
@@ -80,7 +87,7 @@ class Gui {
 			.setFont(SFFont_14);
 		ballCountTextField = cp5.addTextfield("ballCountInput")
 			.setLabel("")
-			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, moveInfectedToggle.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
+			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, moveInfectedSlider.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
 			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT)
 			.setFont(SFFont_14)
 			.setColorBackground(color(Constants.Color.WHITE))
@@ -112,6 +119,10 @@ class Gui {
 		} else {
 			startButton.hide();
 		}
+	}
+
+	float getInfectionMovementReduction() {
+		return moveInfectedSlider.getValue();
 	}
 
 	boolean moveOnInfectedToggleValue() {
