@@ -1,10 +1,9 @@
 class Chart {
     
     // Constants
-    final int X_POS = 250;
-    final int Y_POS = 10;
-    final int CHART_HEIGHT = 80;
-    final int RIGHT_PADDING = 50;
+    final int X_POS = 175;
+    final int Y_POS = Constants.Gui.STANDARD_PADDING;
+    final int CHART_HEIGHT = Constants.View.TOP_LINE_POS - (2 * Constants.Gui.STANDARD_PADDING);
 
     // Private variables
     private CompletionCallback delegate;
@@ -22,7 +21,7 @@ class Chart {
 
     Chart(int totalItemCount, int duration, CompletionCallback delegate) {
         this.delegate = delegate;
-        this.chartWidth = Constants.View.SCREEN_WIDTH - (X_POS + RIGHT_PADDING);
+        this.chartWidth = Constants.View.SCREEN_WIDTH - (X_POS + Constants.Gui.STANDARD_PADDING);
     	this.totalItemCount = totalItemCount;
     	this.totalCalls = Constants.View.FRAME_RATE * duration;
     	this.xInterval = (float)chartWidth / (float)totalCalls;

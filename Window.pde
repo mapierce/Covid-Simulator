@@ -1,6 +1,5 @@
 class Window implements CompletionCallback, GuiCallback {
 
-	final int TOP_LINE_POS = 100;
 	final int RESET_BUTTON_WIDTH = 100;
 	final int RESET_BUTTON_HEIGHT = 60;
 
@@ -46,7 +45,7 @@ class Window implements CompletionCallback, GuiCallback {
 	        }
 	    }
 	    stroke(Constants.Color.BLACK);
-        line(0, TOP_LINE_POS, Constants.View.SCREEN_WIDTH, TOP_LINE_POS);
+        line(0, Constants.View.TOP_LINE_POS, Constants.View.SCREEN_WIDTH, Constants.View.TOP_LINE_POS);
         line(0, Constants.View.BOTTOM_LINE_POS, Constants.View.SCREEN_WIDTH, Constants.View.BOTTOM_LINE_POS);
     	updateCountText();
         chart.display(healthyCount, infectedCount, recoveredCount, simulationComplete);
@@ -57,9 +56,9 @@ class Window implements CompletionCallback, GuiCallback {
 
 	ArrayList<Ball> createBalls() {
 	    ArrayList<Ball> balls = new ArrayList<Ball>();
-	    balls.add(new Ball(random(Constants.View.SCREEN_WIDTH), random(TOP_LINE_POS, Constants.View.BOTTOM_LINE_POS)));
+	    balls.add(new Ball(random(Constants.View.SCREEN_WIDTH), random(Constants.View.TOP_LINE_POS, Constants.View.BOTTOM_LINE_POS)));
 	    while(balls.size() < ballCount) {
-	        Ball newBall = new Ball(random(Constants.View.SCREEN_WIDTH), random(TOP_LINE_POS, Constants.View.BOTTOM_LINE_POS));
+	        Ball newBall = new Ball(random(Constants.View.SCREEN_WIDTH), random(Constants.View.TOP_LINE_POS, Constants.View.BOTTOM_LINE_POS));
 	        boolean overlapping = false;
 	        for (int j = 0; j < balls.size(); j++) {
 	            if (newBall.overlapsWith(balls.get(j))) {
@@ -78,7 +77,7 @@ class Window implements CompletionCallback, GuiCallback {
 	void handleResetOverlay() {
 		if (simulationComplete) {
 			fill(0, 0, 0, 200);
-			rect(0, TOP_LINE_POS, Constants.View.SCREEN_WIDTH, Constants.View.BOTTOM_LINE_POS - TOP_LINE_POS);
+			rect(0, Constants.View.TOP_LINE_POS, Constants.View.SCREEN_WIDTH, Constants.View.BOTTOM_LINE_POS - Constants.View.TOP_LINE_POS);
 			gui.showResetButton(true);
 		} else {
 			gui.showResetButton(false);
@@ -103,13 +102,13 @@ class Window implements CompletionCallback, GuiCallback {
 	    getCounts();
 	    fill(Constants.Color.COVID_GREEN);
 	    textSize(25);
-	    text("Healthy: " + healthyCount, 10, 25);
+	    text("Healthy: " + healthyCount, Constants.Gui.STANDARD_PADDING, 27);
 	    fill(Constants.Color.COVID_RED);
 	    textSize(25);
-	    text("Infected: " + infectedCount, 10, 55);
+	    text("Infected: " + infectedCount, Constants.Gui.STANDARD_PADDING, 57);
 	    fill(Constants.Color.COVID_PURPLE);
 	    textSize(25);
-	    text("Recovered: " + recoveredCount, 10, 85);
+	    text("Recovered: " + recoveredCount, Constants.Gui.STANDARD_PADDING, 87);
 	}
 
 	void getCounts() {

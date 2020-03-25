@@ -5,6 +5,7 @@ static class Constants {
 		final static int SCREEN_WIDTH = 1000;
 		final static int SCREEN_HEIGHT = 800;
 		final static int FRAME_RATE = 30;
+		final static int TOP_LINE_POS = 100;
 		final static int BOTTOM_LINE_POS = 700;	
 
 	}
