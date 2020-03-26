@@ -25,7 +25,7 @@ static class Constants {
 		final static int RESET_BUTTON_HEIGHT = 40;
 		final static int STANDARD_PADDING = 8;
 		final static int COL_ONE_CONTROL_X = 200;
-		final static int TOP_LABEL_PADDING = 12;
+		final static int TOP_LABEL_PADDING = 20;
 		final static int LABEL_SPACING = 22;
 		final static int CONTROL_SPACING = 24;
 		final static int INPUT_WIDTH = 100;

@@ -1,7 +1,7 @@
 class Chart {
     
     // Constants
-    final int X_POS = 175;
+    final int X_POS = 200;
     final int Y_POS = Constants.Gui.STANDARD_PADDING;
     final int CHART_HEIGHT = Constants.View.TOP_LINE_POS - (2 * Constants.Gui.STANDARD_PADDING);
 
