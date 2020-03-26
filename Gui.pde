@@ -6,9 +6,8 @@ class Gui {
 	private ControlP5 cp5;
 	private Button startButton;
 	private Button resetButton;
-	private Textlabel moveInfectedToggleLabel;
+	private Textlabel moveInfectedSliderLabel;
 	private Slider moveInfectedSlider;
-	// private Toggle moveInfectedToggle;
 	private Textlabel ballCountTextFieldLabel;
 	private Textfield ballCountTextField;
 	private Textfield secondsInputTextField;
@@ -57,7 +56,7 @@ class Gui {
 	}
 
 	void setupMoveOnInfectedToggle() {
-		moveInfectedToggleLabel = cp5.addTextlabel("stopMovingInfectedLabel")
+		moveInfectedSliderLabel = cp5.addTextlabel("stopMovingInfectedLabel")
 			.setText("Slow infected movement by %:")
 			.setPosition(Constants.Gui.STANDARD_PADDING, Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
 			.setColorValue(Constants.Color.BLACK)
@@ -73,7 +72,7 @@ class Gui {
 	void setupBallCountInput() {
 		ballCountTextFieldLabel = cp5.addTextlabel("ballCountLabel")
 			.setText("Number of people:")
-			.setPosition(Constants.Gui.STANDARD_PADDING, moveInfectedToggleLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
+			.setPosition(Constants.Gui.STANDARD_PADDING, moveInfectedSliderLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
 			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
 		ballCountTextField = cp5.addTextfield("ballCountInput")
