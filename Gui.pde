@@ -13,6 +13,8 @@ class Gui {
 	private Textfield secondsInputTextField;
 	private Textlabel generalMovementSliderLabel;
 	private Slider generalMovementSlider;
+	private Textlabel superSpreaderSliderLabel;
+	private Slider superSpreaderSlider;
 	private PFont SFFont_25;
 	private PFont SFFont_14;
 
@@ -32,6 +34,7 @@ class Gui {
 		setupBallCountInput();
 		setupTimeInput();
 		setupGeneralMovementSlider();
+		setupSuperSpreaderSlider();
 	}
 
 	void setupStartButton() {
@@ -107,7 +110,7 @@ class Gui {
 	void setupGeneralMovementSlider() {
 		generalMovementSliderLabel = cp5.addTextlabel("generalMovementSliderLabel")
 			.setText("% of people allowed to move:")
-			.setPosition(moveInfectedSlider.getPosition()[0] + Constants.Gui.INPUT_WIDTH + (Constants.Gui.STANDARD_PADDING * 15), Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
+			.setPosition(moveInfectedSlider.getPosition()[0] + Constants.Gui.INPUT_WIDTH + (Constants.Gui.STANDARD_PADDING * 13), Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
 			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
 		generalMovementSlider = cp5.addSlider("generalMovementSlider")
@@ -115,6 +118,20 @@ class Gui {
 			.setRange(0, 100)
 			.setValue(100)
 			.setPosition(Constants.Gui.COL_TWO_CONTROL_X, Constants.View.BOTTOM_LINE_POS + (Constants.Gui.STANDARD_PADDING * 2))
+			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
+	}
+
+	void setupSuperSpreaderSlider() {
+		superSpreaderSliderLabel = cp5.addTextlabel("superSPreaderSliderLabel")
+			.setText("% of super spreaders (x2 speed):")
+			.setPosition(moveInfectedSlider.getPosition()[0] + Constants.Gui.INPUT_WIDTH + (Constants.Gui.STANDARD_PADDING * 13), generalMovementSlider.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
+			.setColorValue(Constants.Color.BLACK)
+			.setFont(SFFont_14);
+		superSpreaderSlider = cp5.addSlider("superSpreaderSlider")
+			.setLabel("")
+			.setRange(0, 100)
+			.setValue(0)
+			.setPosition(Constants.Gui.COL_TWO_CONTROL_X, generalMovementSlider.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
 			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
 	}
 
@@ -128,8 +145,8 @@ class Gui {
 		}
 	}
 
-	float getInfectionMovementReduction() {
-		return moveInfectedSlider.getValue();
+	float getInfectionMovementReductionPercentage() {
+		return moveInfectedSlider.getValue() / 100;
 	}
 
 	int getBallCountFromTextField() {
@@ -154,6 +171,10 @@ class Gui {
 
 	float getMovementPercentage() {
 		return generalMovementSlider.getValue() / 100;
+	}
+
+	float getSuperSpreaderPercentage() {
+		return superSpreaderSlider.getValue() / 100;
 	}
 
 	// Set default values

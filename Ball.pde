@@ -17,12 +17,14 @@ class Ball {
     private HealthStatus healthStatus = HealthStatus.HEALTHY;
     private ArrayList<Ball> otherBalls;
     private float lastMovementReduction;
+    private boolean superSpreader;
     
     // SETUP
 
     Ball(float x, float y, int ballCount) {
         this.location = new PVector(x, y);
         this.ballCount = ballCount;
+        this.superSpreader = false;
     }
     
     void update(int id, ArrayList<Ball> otherBalls) {
@@ -53,19 +55,28 @@ class Ball {
         circle(location.x,location.y,RADIUS * 2);
     }
     
-    void updateLocation(float movementReduction, float populationMovementPercentage) {
+    void updateLocation(float movementReductionPercentage, float populationMovementPercentage, float superSpreaderPercentage) {
         if (populationMovementPercentage == 0.0) {
             return;
         } else if (populationMovementPercentage < 1.0) {
             int maxMovementId = (int)((float)ballCount * populationMovementPercentage);
             if (id > maxMovementId) return; 
         }
-        
+        if (superSpreaderPercentage > 0.0) {
+            int maxSpreaderId = (int)((float)ballCount * superSpreaderPercentage);
+            if (id < maxSpreaderId && !superSpreader) {
+                superSpreader = true;
+                velocity = new PVector(velocity.x * 2, velocity.y * 2);
+            } else if (id > maxSpreaderId && superSpreader) {
+                superSpreader = false;
+                velocity = new PVector(velocity.x / 2, velocity.y / 2);
+            }
+        }
         if (healthStatus == HealthStatus.INFECTED) {
-            if (movementReduction == 100) return;
-            if (movementReduction > 0.0 && movementReduction < 100.0 && movementReduction != lastMovementReduction) {
-                lastMovementReduction = movementReduction;
-                float percentage = 1 - (movementReduction / 100);
+            if (movementReductionPercentage == 1) return;
+            if (movementReductionPercentage > 0.0 && movementReductionPercentage < 1.0 && movementReductionPercentage != lastMovementReduction) {
+                lastMovementReduction = movementReductionPercentage;
+                float percentage = 1 - movementReductionPercentage;
                 velocity = new PVector(velocity.x * percentage, velocity.y * percentage);
             }
         }
