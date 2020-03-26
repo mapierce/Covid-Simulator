@@ -11,6 +11,8 @@ class Gui {
 	private Textlabel ballCountTextFieldLabel;
 	private Textfield ballCountTextField;
 	private Textfield secondsInputTextField;
+	private Textlabel generalMovementSliderLabel;
+	private Slider generalMovementSlider;
 	private PFont SFFont_25;
 	private PFont SFFont_14;
 
@@ -29,6 +31,7 @@ class Gui {
 		setupMoveOnInfectedSlider();
 		setupBallCountInput();
 		setupTimeInput();
+		setupGeneralMovementSlider();
 	}
 
 	void setupStartButton() {
@@ -99,6 +102,20 @@ class Gui {
 			.setColorBackground(color(Constants.Color.WHITE))
 			.setColor(Constants.Color.BLACK);
 		setDefaultDuration();
+	}
+
+	void setupGeneralMovementSlider() {
+		generalMovementSliderLabel = cp5.addTextlabel("generalMovementSliderLabel")
+			.setText("% of people allowed to move:")
+			.setPosition(moveInfectedSlider.getPosition()[0] + Constants.Gui.INPUT_WIDTH + (Constants.Gui.STANDARD_PADDING * 15), Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
+			.setColorValue(Constants.Color.BLACK)
+			.setFont(SFFont_14);
+		generalMovementSlider = cp5.addSlider("generalMovementSlider")
+			.setLabel("")
+			.setRange(0, 100)
+			.setValue(100)
+			.setPosition(Constants.Gui.COL_TWO_CONTROL_X, Constants.View.BOTTOM_LINE_POS + (Constants.Gui.STANDARD_PADDING * 2))
+			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
 	}
 
 	// GUI getters & setters
