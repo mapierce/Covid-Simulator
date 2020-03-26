@@ -12,6 +12,7 @@ static class Constants {
 
 	static class Simulator {
 
+		final static int RADIUS = 5;
 		final static int DEFAULT_BALL_COUNT = 400;
 		final static int DEFAULT_TOTAL_SECONDS = 60;
 

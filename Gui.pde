@@ -75,15 +75,43 @@ class Gui {
 			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
 	}
 
+	void setupGeneralMovementSlider() {
+		generalMovementSliderLabel = cp5.addTextlabel("generalMovementSliderLabel")
+			.setText("% of people allowed to move:")
+			.setPosition(Constants.Gui.STANDARD_PADDING, moveInfectedSliderLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
+			.setColorValue(Constants.Color.BLACK)
+			.setFont(SFFont_14);
+		generalMovementSlider = cp5.addSlider("generalMovementSlider")
+			.setLabel("")
+			.setRange(0, 100)
+			.setValue(100)
+			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, moveInfectedSlider.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
+			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
+	}
+
+	void setupSuperSpreaderSlider() {
+		superSpreaderSliderLabel = cp5.addTextlabel("superSPreaderSliderLabel")
+			.setText("% of super spreaders (x2 speed):")
+			.setPosition(Constants.Gui.STANDARD_PADDING, generalMovementSliderLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
+			.setColorValue(Constants.Color.BLACK)
+			.setFont(SFFont_14);
+		superSpreaderSlider = cp5.addSlider("superSpreaderSlider")
+			.setLabel("")
+			.setRange(0, 100)
+			.setValue(0)
+			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, generalMovementSlider.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
+			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
+	}
+
 	void setupBallCountInput() {
 		ballCountTextFieldLabel = cp5.addTextlabel("ballCountLabel")
 			.setText("Number of people:")
-			.setPosition(Constants.Gui.STANDARD_PADDING, moveInfectedSliderLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
+			.setPosition(moveInfectedSlider.getPosition()[0] + Constants.Gui.INPUT_WIDTH + (Constants.Gui.STANDARD_PADDING * 15), Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
 			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
 		ballCountTextField = cp5.addTextfield("ballCountInput")
 			.setLabel("")
-			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, moveInfectedSlider.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
+			.setPosition(Constants.Gui.COL_TWO_CONTROL_X, Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
 			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT)
 			.setFont(SFFont_14)
 			.setColorBackground(color(Constants.Color.WHITE))
@@ -94,45 +122,17 @@ class Gui {
 	void setupTimeInput() {
 		cp5.addTextlabel("secondsInputLabel")
 			.setText("Simulation duration (seconds):")
-			.setPosition(Constants.Gui.STANDARD_PADDING, ballCountTextFieldLabel.getPosition()[1] + Constants.Gui.LABEL_SPACING)
+			.setPosition(moveInfectedSlider.getPosition()[0] + Constants.Gui.INPUT_WIDTH + (Constants.Gui.STANDARD_PADDING * 15), ballCountTextField.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
 			.setColorValue(Constants.Color.BLACK)
 			.setFont(SFFont_14);
 		secondsInputTextField = cp5.addTextfield("secondsInput")
 			.setLabel("")
-			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, ballCountTextField.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
+			.setPosition(Constants.Gui.COL_TWO_CONTROL_X, ballCountTextField.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
 			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT)
 			.setFont(SFFont_14)
 			.setColorBackground(color(Constants.Color.WHITE))
 			.setColor(Constants.Color.BLACK);
 		setDefaultDuration();
-	}
-
-	void setupGeneralMovementSlider() {
-		generalMovementSliderLabel = cp5.addTextlabel("generalMovementSliderLabel")
-			.setText("% of people allowed to move:")
-			.setPosition(moveInfectedSlider.getPosition()[0] + Constants.Gui.INPUT_WIDTH + (Constants.Gui.STANDARD_PADDING * 13), Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
-			.setColorValue(Constants.Color.BLACK)
-			.setFont(SFFont_14);
-		generalMovementSlider = cp5.addSlider("generalMovementSlider")
-			.setLabel("")
-			.setRange(0, 100)
-			.setValue(100)
-			.setPosition(Constants.Gui.COL_TWO_CONTROL_X, Constants.View.BOTTOM_LINE_POS + (Constants.Gui.STANDARD_PADDING * 2))
-			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
-	}
-
-	void setupSuperSpreaderSlider() {
-		superSpreaderSliderLabel = cp5.addTextlabel("superSPreaderSliderLabel")
-			.setText("% of super spreaders (x2 speed):")
-			.setPosition(moveInfectedSlider.getPosition()[0] + Constants.Gui.INPUT_WIDTH + (Constants.Gui.STANDARD_PADDING * 13), generalMovementSlider.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
-			.setColorValue(Constants.Color.BLACK)
-			.setFont(SFFont_14);
-		superSpreaderSlider = cp5.addSlider("superSpreaderSlider")
-			.setLabel("")
-			.setRange(0, 100)
-			.setValue(0)
-			.setPosition(Constants.Gui.COL_TWO_CONTROL_X, generalMovementSlider.getPosition()[1] + Constants.Gui.CONTROL_SPACING)
-			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
 	}
 
 	// GUI getters & setters
@@ -152,7 +152,16 @@ class Gui {
 	int getBallCountFromTextField() {
 		String ballCountText = ballCountTextField.getText();
 		if (Utility.isInteger(ballCountText)) {
-			return Integer.parseInt(ballCountText);
+			int ballCount = Integer.parseInt(ballCountText);
+			int area = (Constants.View.BOTTOM_LINE_POS - Constants.View.TOP_LINE_POS) * Constants.View.SCREEN_WIDTH;
+			int totalCircleArea = ((Constants.Simulator.RADIUS * 2) * (Constants.Simulator.RADIUS * 2)) * ballCount;
+			if ((float)totalCircleArea/(float)area > 0.5) {
+				setDefaultBallCount();
+				return Constants.Simulator.DEFAULT_BALL_COUNT;
+			} else {
+				return ballCount;	
+			}
+			
 		} else {
 			setDefaultBallCount();
 			return Constants.Simulator.DEFAULT_BALL_COUNT;

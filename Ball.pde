@@ -2,7 +2,6 @@ class Ball {
 
     // Constants
 
-    final float RADIUS = 5;
     final float INFECTED_TIME = 9000;
     final float TOP_LINE_POSITION = 100;
     final float BOTTOM_LINE_POSITION = 700;
@@ -52,7 +51,7 @@ class Ball {
         noStroke();
         checkRecoveryTime();
         fill(getColor());
-        circle(location.x,location.y,RADIUS * 2);
+        circle(location.x,location.y,Constants.Simulator.RADIUS * 2);
     }
     
     void updateLocation(float movementReductionPercentage, float populationMovementPercentage, float superSpreaderPercentage) {
@@ -104,17 +103,17 @@ class Ball {
     // COLLISION DETECTION
     
     void checkBoundaryCollision() {
-        if (location.x > width - RADIUS) {
-            location.x = width - RADIUS;
+        if (location.x > width - Constants.Simulator.RADIUS) {
+            location.x = width - Constants.Simulator.RADIUS;
             velocity.x *= -1;
-        } else if (location. x < RADIUS) {
-            location.x = RADIUS;
+        } else if (location. x < Constants.Simulator.RADIUS) {
+            location.x = Constants.Simulator.RADIUS;
             velocity.x *= -1;
-        } else if (location.y > BOTTOM_LINE_POSITION - RADIUS) {
-            location.y = BOTTOM_LINE_POSITION - RADIUS;
+        } else if (location.y > BOTTOM_LINE_POSITION - Constants.Simulator.RADIUS) {
+            location.y = BOTTOM_LINE_POSITION - Constants.Simulator.RADIUS;
             velocity.y *= -1;
-        } else if (location.y < TOP_LINE_POSITION + RADIUS) {
-            location.y = TOP_LINE_POSITION + RADIUS;
+        } else if (location.y < TOP_LINE_POSITION + Constants.Simulator.RADIUS) {
+            location.y = TOP_LINE_POSITION + Constants.Simulator.RADIUS;
             velocity.y *= -1;
         }
     }
@@ -125,7 +124,7 @@ class Ball {
             float dx = other.location.x - location.x;
             float dy = other.location.y - location.y;
             float dist = sqrt(dx*dx+dy*dy);
-            if(dist < RADIUS + other.RADIUS) {
+            if(dist < Constants.Simulator.RADIUS + Constants.Simulator.RADIUS) {
                 updatePosition(other,dx,dy);
                 updateInfected(other);
             }
@@ -147,14 +146,14 @@ class Ball {
         float vx2 = other.velocity.x*cos+other.velocity.y*sin;
         float vy2 = other.velocity.y*cos-other.velocity.x*sin;
         
-        float vx1final = ((RADIUS-other.RADIUS)*vx1+2*other.RADIUS*vx2)/(RADIUS+other.RADIUS);
-        float vx2final = ((other.RADIUS-RADIUS)*vx2+2*RADIUS*vx1)/(RADIUS+other.RADIUS);
+        float vx1final = ((Constants.Simulator.RADIUS-Constants.Simulator.RADIUS)*vx1+2*Constants.Simulator.RADIUS*vx2)/(Constants.Simulator.RADIUS+Constants.Simulator.RADIUS);
+        float vx2final = ((Constants.Simulator.RADIUS-Constants.Simulator.RADIUS)*vx2+2*Constants.Simulator.RADIUS*vx1)/(Constants.Simulator.RADIUS+Constants.Simulator.RADIUS);
         
         vx1 = vx1final;
         vx2 = vx2final;
         
         float absV = abs(vx1)+abs(vx2);
-        float overlap = (RADIUS+other.RADIUS)-abs(x1-x2);
+        float overlap = (Constants.Simulator.RADIUS+Constants.Simulator.RADIUS)-abs(x1-x2);
         x1 += vx1/absV*overlap;
         x2 += vx2/absV*overlap;
         
@@ -179,7 +178,7 @@ class Ball {
     
     boolean overlapsWith(Ball ball) {
         float distance = dist(ball.location.x, ball.location.y, this.location.x, this.location.y);
-        return distance < RADIUS * 2;
+        return distance < Constants.Simulator.RADIUS * 2;
     }
     
     color getColor() {
