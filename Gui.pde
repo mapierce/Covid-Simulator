@@ -26,7 +26,7 @@ class Gui {
 	void setupGui() {
 		setupStartButton();
 		setupResetButton();
-		setupMoveOnInfectedToggle();
+		setupMoveOnInfectedSlider();
 		setupBallCountInput();
 		setupTimeInput();
 	}
@@ -55,7 +55,7 @@ class Gui {
 			});
 	}
 
-	void setupMoveOnInfectedToggle() {
+	void setupMoveOnInfectedSlider() {
 		moveInfectedSliderLabel = cp5.addTextlabel("stopMovingInfectedLabel")
 			.setText("Slow infected movement by %:")
 			.setPosition(Constants.Gui.STANDARD_PADDING, Constants.View.BOTTOM_LINE_POS + Constants.Gui.TOP_LABEL_PADDING)
