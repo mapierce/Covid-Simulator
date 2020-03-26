@@ -70,7 +70,7 @@ class Gui {
 		moveInfectedSlider = cp5.addSlider("infectedSlider")
 			.setLabel("")
 			.setRange(0, 100)
-			.setValue(50)
+			.setValue(25)
 			.setPosition(Constants.Gui.COL_ONE_CONTROL_X, Constants.View.BOTTOM_LINE_POS + (Constants.Gui.STANDARD_PADDING * 2))
 			.setSize(Constants.Gui.INPUT_WIDTH, Constants.Gui.INPUT_HEIGHT);
 	}
