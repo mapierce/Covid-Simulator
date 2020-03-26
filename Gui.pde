@@ -152,6 +152,10 @@ class Gui {
 		}
 	}
 
+	float getMovementPercentage() {
+		return generalMovementSlider.getValue() / 100;
+	}
+
 	// Set default values
 
 	void setDefaultBallCount() {

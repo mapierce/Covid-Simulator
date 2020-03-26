@@ -39,7 +39,7 @@ class Window implements CompletionCallback, GuiCallback {
 		if (!simulationComplete) {
 	        for (Ball ball : balls) {
 	            ball.display();
-	            ball.updateLocation(gui.getInfectionMovementReduction());
+	            ball.updateLocation(gui.getInfectionMovementReduction(), gui.getMovementPercentage());
 	            ball.checkBoundaryCollision();
 	            ball.checkCollision();
 	        }
@@ -56,9 +56,9 @@ class Window implements CompletionCallback, GuiCallback {
 
 	ArrayList<Ball> createBalls() {
 	    ArrayList<Ball> balls = new ArrayList<Ball>();
-	    balls.add(new Ball(random(Constants.View.SCREEN_WIDTH), random(Constants.View.TOP_LINE_POS, Constants.View.BOTTOM_LINE_POS)));
+	    balls.add(new Ball(random(Constants.View.SCREEN_WIDTH), random(Constants.View.TOP_LINE_POS, Constants.View.BOTTOM_LINE_POS), ballCount));
 	    while(balls.size() < ballCount) {
-	        Ball newBall = new Ball(random(Constants.View.SCREEN_WIDTH), random(Constants.View.TOP_LINE_POS, Constants.View.BOTTOM_LINE_POS));
+	        Ball newBall = new Ball(random(Constants.View.SCREEN_WIDTH), random(Constants.View.TOP_LINE_POS, Constants.View.BOTTOM_LINE_POS), ballCount);
 	        boolean overlapping = false;
 	        for (int j = 0; j < balls.size(); j++) {
 	            if (newBall.overlapsWith(balls.get(j))) {

@@ -10,6 +10,7 @@ class Ball {
     // Private variables
     
     private PVector location;
+    private int ballCount;
     private PVector velocity = PVector.random2D().mult(1.2);
     private int id;
     private int infectedTimer;
@@ -19,8 +20,9 @@ class Ball {
     
     // SETUP
 
-    Ball(float x, float y) {
+    Ball(float x, float y, int ballCount) {
         this.location = new PVector(x, y);
+        this.ballCount = ballCount;
     }
     
     void update(int id, ArrayList<Ball> otherBalls) {
@@ -51,7 +53,14 @@ class Ball {
         circle(location.x,location.y,RADIUS * 2);
     }
     
-    void updateLocation(float movementReduction) {
+    void updateLocation(float movementReduction, float populationMovementPercentage) {
+        if (populationMovementPercentage == 0.0) {
+            return;
+        } else if (populationMovementPercentage < 1.0) {
+            int maxMovementId = (int)((float)ballCount * populationMovementPercentage);
+            if (id > maxMovementId) return; 
+        }
+        
         if (healthStatus == HealthStatus.INFECTED) {
             if (movementReduction == 100) return;
             if (movementReduction > 0.0 && movementReduction < 100.0 && movementReduction != lastMovementReduction) {
