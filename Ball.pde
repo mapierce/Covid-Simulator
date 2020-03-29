@@ -154,6 +154,7 @@ class Ball {
         float targetY = current.location.y + sin * (Constants.Simulator.RADIUS * 2);
         float ax = targetX - other.location.x;
         float ay = targetY - other.location.y;
+        // if current overlaps other, move it away
         current.velocity.x -= ax;
         current.velocity.y -= ay;
     }
