@@ -56,10 +56,14 @@ class Ball {
     
     void updateLocation(float movementReductionPercentage, float populationMovementPercentage, float superSpreaderPercentage) {
         if (populationMovementPercentage == 0.0) {
+            velocity = new PVector(0, 0);
             return;
         } else if (populationMovementPercentage < 1.0) {
             int maxMovementId = (int)((float)ballCount * populationMovementPercentage);
-            if (id > maxMovementId) return; 
+            if (id > maxMovementId) {
+                velocity = new PVector(0, 0);
+                return;
+            }
         }
         if (superSpreaderPercentage > 0.0) {
             int maxSpreaderId = (int)((float)ballCount * superSpreaderPercentage);
@@ -72,7 +76,10 @@ class Ball {
             }
         }
         if (healthStatus == HealthStatus.INFECTED) {
-            if (movementReductionPercentage == 1) return;
+            if (movementReductionPercentage == 1) {
+                velocity = new PVector(0, 0);
+                return;
+            };
             if (movementReductionPercentage > 0.0 && movementReductionPercentage < 1.0 && movementReductionPercentage != lastMovementReduction) {
                 lastMovementReduction = movementReductionPercentage;
                 float percentage = 1 - movementReductionPercentage;
@@ -124,11 +131,31 @@ class Ball {
             float dx = other.location.x - location.x;
             float dy = other.location.y - location.y;
             float dist = sqrt(dx*dx+dy*dy);
+            boolean currentCanMove = velocity.x != 0.0 && velocity.y != 0.0; 
+            boolean otherCanMove = other.velocity.x != 0.0 && other.velocity.y != 0.0;
             if(dist < Constants.Simulator.RADIUS + Constants.Simulator.RADIUS) {
                 updatePosition(other,dx,dy);
                 updateInfected(other);
+            } else if (dist < Constants.Simulator.RADIUS + Constants.Simulator.RADIUS && currentCanMove && !otherCanMove) {
+                updateStaticPosition(this, other, dx, dy);
+                updateInfected(other);
+            } else if (dist < Constants.Simulator.RADIUS + Constants.Simulator.RADIUS && !currentCanMove && otherCanMove) {
+                updateStaticPosition(other, this, -dx, -dy);
+                updateInfected(other);
             }
         }
+    }
+
+    void updateStaticPosition(Ball current, Ball other, float dx, float dy) {
+        float angle = atan2(dy, dx);
+        float sin = sin(angle);
+        float cos = cos(angle); 
+        float targetX = current.location.x + cos * (Constants.Simulator.RADIUS * 2);
+        float targetY = current.location.y + sin * (Constants.Simulator.RADIUS * 2);
+        float ax = targetX - other.location.x;
+        float ay = targetY - other.location.y;
+        current.velocity.x -= ax;
+        current.velocity.y -= ay;
     }
     
     void updatePosition(Ball other, float dx, float dy) {
