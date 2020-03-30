@@ -133,7 +133,7 @@ class Ball {
             float dist = sqrt(dx*dx+dy*dy);
             boolean currentCanMove = velocity.x != 0.0 && velocity.y != 0.0; 
             boolean otherCanMove = other.velocity.x != 0.0 && other.velocity.y != 0.0;
-            if(dist < Constants.Simulator.RADIUS + Constants.Simulator.RADIUS) {
+            if(dist < Constants.Simulator.RADIUS + Constants.Simulator.RADIUS && currentCanMove && otherCanMove) {
                 updatePosition(other,dx,dy);
                 updateInfected(other);
             } else if (dist < Constants.Simulator.RADIUS + Constants.Simulator.RADIUS && currentCanMove && !otherCanMove) {
