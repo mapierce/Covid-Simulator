@@ -11,7 +11,9 @@ The first goal of the project was to recreate the simulation at its most basic a
 </p>
 
 ## ⬇️💻 Download
-Check out the [Releases](https://github.com/mapierce/Covid-Simulator/releases) tab for the latest downloads. **Note:** If running on a Mac, you will need to right click the application and then select "Open".
+Check out the [Releases](https://github.com/mapierce/Covid-Simulator/releases) tab for the latest downloads. 
+**Running on Mac:** You may need to right click the application and then select "Open".
+**Running on Windows:** If presented with a Windows Defender modal, you can click "More Info" and then a "Run anyway" button should appear which you can click.
 
 ## 👨‍👩‍👧‍👧 Contributing
 Want to help? Great! Pull requests are all welcome! By contributing to “Covid Simulator” you agree that your contributions will be licensed under its MIT license
